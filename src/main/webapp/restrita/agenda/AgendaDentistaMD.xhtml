@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+     
+    <h:head>
+    	<meta http-equiv="Content-Type" content="width=device-width, initial-scale=1; text/html; charset=UTF-8" />
+    	<h:outputStylesheet library="css" name="sistema.css" />
+        <title>Histórico de Consultas</title>
+    </h:head>
+     
+    <h:body>
+        <h:form>
+        	<div class="grid-modal">
+	            <p:dataTable var="item" value="#{agendaDentitstaMDBean.registros}" emptyMessage="Nenhum registro encontrado">
+		    		<p:column headerText="Data Agenda">
+		    			<h:outputText value="#{item.dtInicio}" >
+		    				<f:convertDateTime pattern="dd/MM/yy HH:mm" locale="pt" />  
+		    			</h:outputText> - 
+		    			<h:outputText value="#{item.dtFim}" >
+		    				<f:convertDateTime pattern=" HH:mm" locale="pt" />  
+		    			</h:outputText>
+		    		</p:column>		    		
+		    		<p:column headerText="Status" >
+		    			<h:outputText value="#{item.dsAgendaStatus}" />
+		    		</p:column>	  		
+		    		<p:column headerText="Procedimento">
+		    			<h:outputText value="#{item.dsProcedimento}" />
+		    		</p:column>	  		
+		    		<p:column headerText="Dentista">
+		    			<h:outputText value="#{item.dsDentista}" />
+		    		</p:column>	  		
+	            </p:dataTable>
+            </div>
+        </h:form>
+    </h:body>
+     
+</html>

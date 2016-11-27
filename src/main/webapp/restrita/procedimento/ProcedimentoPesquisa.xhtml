@@ -1,0 +1,57 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">Tipo de Gasto</ui:define>
+    
+    <ui:define name="corpo">
+    
+    	<h:form id="frmPesquisa">
+
+	    	<p:messages autoUpdate="true" closable="true" />
+	 
+	    	<p:panelGrid columns="2" id="painel" >
+				
+				<f:facet name="header"> 
+					Pesquisa de Procedimento 
+				</f:facet>	    			
+
+	    		<p:outputLabel for="botoes"/>
+	    		<p:outputPanel id="botoes">
+					<p:link outcome="/restrita/procedimento/Procedimento">
+						<i class="fa fa-fw fa-plus"></i><span>Novo</span>
+					</p:link>
+	    		</p:outputPanel>
+	    			    		
+	    	</p:panelGrid>
+	    	
+	    	<p:dataTable id="dtbRegistros" value="#{procedimentoBeanPesquisa.filtrados}" var="item"
+	    		style="margin-top: 0px" emptyMessage="Nenhum registro encontrado." rows="13"
+	    		paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+	    		<p:column style="width: 35px; text-align: center">
+	    			<p:link outcome="/restrita/procedimento/Procedimento">
+	    				<i class="fa fa-fw fa-edit"></i>
+	    				<f:param name="procedimento" value="#{item.id}" />
+	    			</p:link> 			
+	    		</p:column>	    		
+	    		<p:column headerText="Nome">
+	    			<h:outputText value="#{item.dsDescricao} &amp;nbsp;" escape="false" />
+	    		</p:column>
+	    	</p:dataTable>
+	    	
+	    	<p:confirmDialog header="Exclusão" 
+	    		message="Tem certeza que deseja excluir ?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide()"
+	    			action="#{procedimentoBeanPesquisa.excluir}" process="@this"
+	    			update=":frmPesquisa:dtbRegistros" />
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" />
+	    	</p:confirmDialog>
+	    	
+    	</h:form>
+    	
+    </ui:define>
+</ui:composition>

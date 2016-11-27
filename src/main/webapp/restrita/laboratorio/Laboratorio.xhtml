@@ -1,0 +1,110 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:o="http://omnifaces.org/ui">
+
+    <ui:define name="titulo">#{laboratorioBean.editando ? 'Edição de registro' : 'Novo registro'}</ui:define>
+    
+    <ui:define name="corpo">
+    	<f:metadata>
+    		<o:viewParam name="laboratorio" value="#{laboratorioBean.laboratorio}" />
+    		<f:event listener="#{laboratorioBean.inicializar}" type="preRenderView" />
+    	</f:metadata>
+    
+    	<h:form>
+				
+			<style type="text/css">
+				.valorTotal input { font-weight: bold !important; }
+				.valorPendente input { color: red !important; }
+			</style>
+		
+			<f:passThroughAttribute name="autocomplete" value="off"/>
+
+	    	<p:messages autoUpdate="true" closable="true" />
+	    	
+	    	<p:panelGrid columns="2" id="painel">
+	    						
+				<f:facet name="header"> 
+				    #{laboratorioBean.editando ? 'Laboratório / Edição de registro' : 'Laboratório / Novo registro'}
+				</f:facet>	    
+						    		  			    			
+				<p:outputLabel value="Cliente" for="idDentista" />
+				<p:selectOneMenu id="idDentista" value="#{laboratorioBean.idDentista}" filter="true">
+					<f:selectItem itemLabel="" itemValue="" />
+					<f:selectItems value="#{homeMB.proteticos}" var="item"
+						itemLabel="#{item.dsNome}" itemValue="#{item.id}" />
+					<p:ajax event="change" listener="#{laboratorioBean.verificaPendencias}"
+					 	process="@this idDentista" update="@form" />														
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Paciente:" for="idPaciente" />
+				<p:selectOneMenu id="idPaciente" value="#{laboratorioBean.laboratorio.nomePaciente}" 
+					filter="true" editable="true">
+					<f:selectItems value="#{homeMB.pacientesLab}" var="item"
+						itemLabel="#{item}" itemValue="#{item}" />
+					<p:ajax event="change" listener="#{laboratorioBean.verificaPendencias}"
+					 	process="@this idDentista" update="@form" />														
+				</p:selectOneMenu>	    		
+	    	    		  			    			
+				<p:outputLabel value="Valor Total" for="vlTotal" />
+				<pe:inputNumber id="vlTotal" maxlength="12" readonly="#{laboratorioBean.laboratorio.id ne null}"
+					value="#{laboratorioBean.laboratorio.vlTotal}" styleClass="valorTotal" />
+						    		  		
+				<p:outputLabel value="Histórico Pagamentos" for="outHist" rendered="#{not empty laboratorioBean.historico}" />
+				<p:outputPanel id="outHist" rendered="#{not empty laboratorioBean.historico}" >
+		            <p:dataTable var="item" value="#{laboratorioBean.historico}" 
+		            	emptyMessage="Nenhum registro encontrado" paginator="false" 
+		            	style="width: 180px;">
+			    		<p:column headerText="Data">
+			    			<h:outputText value="#{item.dtEntrada}" >
+			    				<f:convertDateTime pattern="dd/MM/yy" />
+			    			</h:outputText>
+			    		</p:column>		    		
+			    		<p:column headerText="Pago R$">
+			    			<h:outputText value="#{item.vlPago}" >
+								<f:convertNumber pattern="#0.00" />
+			    			</h:outputText>
+			    		</p:column>		  
+		            </p:dataTable>					
+				</p:outputPanel>
+						    			
+				<p:outputLabel value="Valor Restante a pagar" for="vlRest" rendered="#{laboratorioBean.laboratorio.id ne null}" />
+    			<h:outputText id="vlRest" value="#{laboratorioBean.vlValorAPagar}" 
+    				rendered="#{laboratorioBean.laboratorio.id ne null}" style="color: red;" >
+					<f:convertNumber pattern="#0.00" />
+    			</h:outputText>				
+						    			
+				<p:outputLabel value="Valor Pago" for="vlPago" />
+				<pe:inputNumber id="vlPago" maxlength="12"
+					value="#{laboratorioBean.laboratorio.vlPago}" styleClass="valorPendente" />
+					   		
+				<p:outputLabel for="inicio" value="Data:" />
+				<p:calendar id="inicio" value="#{laboratorioBean.laboratorio.dtEntrada}" pattern="dd/MM/yyyy" locale="pt" />
+					
+				<p:outputLabel value="Serviço" for="dsServico" />
+				<p:autoComplete id="dsServico" minQueryLength="2" maxlength="30" queryDelay="400" cache="true"
+					value="#{laboratorioBean.texto}" completeMethod="#{laboratorioBean.completeText}" />
+						    		  			
+				<p:outputLabel value="Observação" for="dsObservacao" />
+				<p:inputTextarea id="dsObservacao" maxlength="150"
+					value="#{laboratorioBean.laboratorio.dsDescricao}" />
+					    			
+	    		<p:outputLabel for="botoes"/>
+	    		<p:outputPanel id="botoes">
+					<p:commandLink id="lnkSalvar" update="@form" action="#{laboratorioBean.validarSalvar}">
+						<i class="fa fa-fw fa-check"></i><span>Salvar</span>
+					</p:commandLink>
+					<p:link outcome="/restrita/laboratorio/LaboratorioPesquisa">
+						<i class="fa fa-fw fa-search"></i>
+						<span>Pesquisar Laboratório</span>
+					</p:link>					
+	    		</p:outputPanel>
+	    		
+	    	</p:panelGrid>
+    	</h:form>
+    </ui:define>
+</ui:composition>

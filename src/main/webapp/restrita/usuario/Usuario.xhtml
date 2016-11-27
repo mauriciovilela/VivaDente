@@ -1,0 +1,63 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:o="http://omnifaces.org/ui">
+
+    <ui:define name="titulo">Alterar Senha</ui:define>
+    
+    <ui:define name="corpo">
+    	<f:metadata>
+    		<o:viewParam name="usuario" value="#{usuarioBean.usuario}" />
+    		<f:event listener="#{usuarioBean.inicializar}" type="preRenderView" />
+    	</f:metadata>
+    
+    	<h:form>
+		
+			<f:passThroughAttribute name="autocomplete" value="off"/>
+
+	    	<p:messages autoUpdate="true" closable="true" />
+	    	
+	    	<p:panelGrid columns="2" id="painel" style="width: 40%; ">
+	    						
+				<f:facet name="header"> 
+				    Usuário
+				</f:facet>	    
+				
+	    		<p:outputLabel value="Nome" for="nome"/>
+                <p:inputText maxlength="40" id="nome" value="#{usuarioBean.usuario.dsNome}" />
+				
+	    		<p:outputLabel value="Usuário" for="dsUsuario"/>
+                <p:inputText maxlength="40" id="dsUsuario" value="#{usuarioBean.usuario.dsUsuario}" />
+
+	    		<p:outputLabel value="E-mail" for="dsEmail"/>
+                <p:inputText maxlength="40" id="dsEmail" value="#{usuarioBean.usuario.dsEmail}" />	    			
+
+	    		<p:outputLabel value="Sócio?" for="flSocio"/>
+	    		<p:selectBooleanCheckbox id="flSocio" value="#{usuarioBean.usuario.flSocio}" />
+
+	    		<p:outputLabel value="Dentista?" for="flDentista"/>
+	    		<p:selectBooleanCheckbox id="flDentista" value="#{usuarioBean.usuario.flDentista}" />
+
+	    		<p:outputLabel value="Cliente Laboratório?" for="flCliente"/>
+	    		<p:selectBooleanCheckbox id="flCliente" value="#{usuarioBean.usuario.flCliente}" />
+
+	    		<p:outputLabel value="Ativo?" for="flAtivo"/>
+	    		<p:selectBooleanCheckbox id="flAtivo" value="#{usuarioBean.usuario.flAtivo}" />
+	    
+	    		<p:outputLabel for="botoes"/>
+	    		<p:outputPanel id="botoes">
+					<p:commandLink id="lnkSalvar" update="@form" action="#{usuarioBean.salvar}">
+						<i class="fa fa-fw fa-check"></i><span>Salvar</span>
+					</p:commandLink>
+					<p:link outcome="/restrita/usuario/UsuarioPesquisa">
+						<i class="fa fa-fw fa-arrow-circle-left"></i><span>Voltar</span>
+					</p:link>
+	    		</p:outputPanel>
+	    			    		
+	    	</p:panelGrid>
+    	</h:form>
+    </ui:define>
+</ui:composition>

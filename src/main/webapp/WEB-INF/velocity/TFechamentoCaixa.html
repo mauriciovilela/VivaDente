@@ -1,0 +1,92 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Fechamento de Caixa</title>
+		<style type="text/css">
+			body { font-size: 13px; }
+			.verde  { color: green; font-weight: bold;font-size: 12px; }
+			.vermelho { color: red; font-weight: bold;font-size: 12px; }
+			.espacoTopo { padding-top: 10px; }
+			.divEsquerda { width: 54%; }
+			.divDireita { width: 44%; }
+		</style>
+	</head>
+	<body>
+		<div>
+			<b>Fechamento Caixa $data</b> => Responsável: $responsavel
+			#if ($obs != "")
+		      => Obs.: $obs
+		    #end			
+		</div>
+		<div class="espacoTopo verde">Líquido $vlLiquido / Líquido Dinheiro $vlLiquidoDinheiro</div>
+		<table>
+			<tr>
+				<td class="divEsquerda" valign="top">
+					<h4>PAGAMENTOS <span class="verde"> ( $vlMovimentado )</span></h4>
+					<table style="width: 100%">
+						<tr>
+							<th nowrap="nowrap">Paciente</th>
+							<th>Dentista</th>
+							<th style="width: 75px;">Total</th>
+						</tr>
+						#foreach( $pag in $pagamentos )
+						<tr>
+							<td>$pag.paciente</td>
+							<td>$pag.dentista</td>
+							<td>$pag.total</td>
+						</tr>
+						#end
+					</table>
+					<div class="espacoTopo vermelho">Total Cartões $vlBrutoCartoes</div>
+					<div class="verde">Total Dinheiro $vlBrutoDinheiro</div>
+					#if ($vlBrutoCheque != "R$ 0")
+						<div class="verde">Total Cheque $vlBrutoCheque</div>
+					#end
+				</td>
+				<td class="divDireita" valign="top">
+					<h4>DESPESAS <span class="vermelho">( $vlDespesas )</span></h4>
+					<table style="width: 100%">
+						<tr>
+							<th>Despesa</th>
+							<th>Obs.</th>
+							<th style="width: 75px;">Total</th>
+						</tr>
+						#foreach( $saida in $saidasComFluxo )
+							<tr>
+								<td style="padding-right: 7px;">$saida.despesa</td>
+								<td>$saida.obs</td>
+								<td>$saida.total</td>
+							</tr>
+						#end
+					</table>
+<!-- 					<div class="espacoTopo vermelho">Total Despesas $vlDespesas</div> -->
+					
+					#if ($saidasSemFluxo.size() > 0)
+						<h4>DESPESAS FORA FLUXO <span class="vermelho"> ( $vlDespesasSemFluxo )</span></h4>
+						<table style="width: 100%">
+							<tr>
+								<th>Despesa</th>
+								<th>Obs.</th>
+								<th style="width: 75px;">Total</th>
+							</tr>
+							#foreach( $saida in $saidasSemFluxo )
+							<tr>
+								<td style="padding-right: 7px;">$saida.despesa</td>
+								<td>$saida.obs</td>
+								<td>$saida.total</td>
+							</tr>
+							#end
+						</table>
+					#end
+					
+					<div class="espacoTopo vermelho">Total Despesas $vlTotalDespesas</div>
+<!-- 					<div class="espacoTopo vermelho">Total Despesas Fora Fluxo $vlDespesas</div> -->
+				</td>
+			</tr>
+		</table>
+
+<!-- 		<br /><br /> -->
+<!-- 		<i>Fechado por</i> $responsavel -->
+<!-- 		<br /> -->
+	
+	</body>
+</html>

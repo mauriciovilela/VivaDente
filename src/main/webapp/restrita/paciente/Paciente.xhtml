@@ -1,0 +1,77 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:o="http://omnifaces.org/ui">
+
+    <ui:define name="titulo">#{pacienteBean.editando ? 'Edição de registro' : 'Novo paciente'}</ui:define>
+    
+    <ui:define name="corpo">
+    
+    	<f:metadata>
+    		<o:viewParam name="paciente" value="#{pacienteBean.paciente}" />
+    		<f:event listener="#{pacienteBean.inicializar}" type="preRenderView" />
+    	</f:metadata>
+    
+    	<h:form>
+		
+			<f:passThroughAttribute name="autocomplete" value="off"/>
+
+	    	<p:messages autoUpdate="true" closable="true" />
+	    	
+	    	<p:focus for="dsNome"></p:focus>
+	    	
+	    	<p:panelGrid columns="2" id="painel">
+	    						
+				<f:facet name="header"> 
+				    #{pacienteBean.editando ? 'Edição de registro' : 'Novo paciente'}
+				</f:facet>	    
+				
+	    		<p:outputLabel value="Nome" for="dsNome"/>
+	    		<p:inputText id="dsNome" maxlength="100" value="#{pacienteBean.paciente.dsNome}"/>
+	    				    				
+	    		<p:outputLabel value="Celular" for="dsCelular"/>
+		        <p:inputText id="dsCelular" maxlength="12" value="#{pacienteBean.paciente.dsCelular}">
+		            <pe:keyFilter regEx="/[\d]/"/>
+		        </p:inputText> 	    		
+	    				    				
+	    		<p:outputLabel value="Telefone Fixo" for="dsFone"/>
+		        <p:inputText id="dsFone" maxlength="12" value="#{pacienteBean.paciente.dsFone}">
+		            <pe:keyFilter regEx="/[\d]/"/>
+		        </p:inputText> 	    		
+	    							
+	    		<p:outputLabel value="CPF / RG" for="nrCPF"/>
+	    		<p:inputText id="nrCPF" maxlength="11" value="#{pacienteBean.paciente.nrRgCpf}"/>
+
+	    		<p:outputLabel value="Endereço" for="dsEndereco"/>
+	    		<p:inputText id="dsEndereco" maxlength="150" value="#{pacienteBean.paciente.dsEndereco}"
+	    			style="width: 250px;" />
+	    			       		    		
+	    		<p:outputLabel value="Cidade" for="dsCidade"/>
+	    		<p:inputText id="dsCidade" maxlength="60" value="#{pacienteBean.paciente.dsCidade}"
+	    			style="width: 250px;" />
+	    			       		    						
+				<p:outputLabel value="Nascimento" for="dtNasc" />
+				<p:calendar id="dtNasc" pattern="dd/MM/yyyy" mask="true"
+					value="#{pacienteBean.paciente.dtNascimento}" locale="pt" />
+						
+	    		<p:outputLabel for="botoes"/>
+	    		<p:outputPanel id="botoes">
+					<p:commandLink id="lnkFinalizar" update="@form" action="#{pacienteBean.salvar}">
+						<i class="fa fa-fw fa-check"></i><span>Salvar</span>
+					</p:commandLink>
+					<p:link outcome="/restrita/paciente/PacientePesquisa">
+						<i class="fa fa-fw fa-arrow-circle-left"></i><span>Voltar</span>
+					</p:link>
+	    		</p:outputPanel>
+	    		
+	    	</p:panelGrid>
+    	
+    	</h:form>
+    	
+    </ui:define>
+    
+</ui:composition>

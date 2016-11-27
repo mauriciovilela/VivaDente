@@ -1,0 +1,69 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">Relatórios</ui:define>
+    
+    <ui:define name="corpo">
+    	<h:form id="frmPesquisa">
+    	
+    		<style type="text/css">
+    			.hasDatepicker {
+    				width: 80px !important;
+    			}
+    		</style>
+
+	    	<p:messages autoUpdate="true" closable="true" />
+	 
+	    	<p:panelGrid columns="6" id="painel">
+	    	
+				<f:facet name="header"> 
+					Relatório de Procedimentos
+				</f:facet>	    			
+				
+				<p:outputLabel value="De" for="inicio" />
+				<p:calendar id="inicio" pattern="dd/MM/yyyy" mask="true"
+					value="#{rptProcedimentoBean.dataIni}" locale="pt" />	
+					
+				<p:outputLabel value="ate" for="fim" />
+				<p:calendar id="fim" pattern="dd/MM/yyyy" mask="true"
+					value="#{rptProcedimentoBean.dataFim}" locale="pt" />	
+						
+	    		<p:outputLabel for="botoes"/>
+	    		<p:outputPanel id="botoes">
+					<p:commandLink id="lnkPesquisar" update="@form" action="#{rptProcedimentoBean.pesquisar}">
+						<i class="fa fa-fw fa-search"></i><span>Pesquisar</span>
+					</p:commandLink>
+	    		</p:outputPanel>
+	    		
+	    	</p:panelGrid>
+	    				
+			<div style="float: left; width: 400px">
+				<p:outputPanel id="outChar" rendered="#{rptProcedimentoBean.registrosConsolidado != null}">
+					<p:chart type="pie" model="#{rptProcedimentoBean.registrosConsolidado}" 
+						style="width:400px;height:300px;float: left" />
+				</p:outputPanel>
+	    	</div>
+	    	
+	    	<div style="float: right;text-align: left;width: 60%;">    	
+		    	<p:dataTable reflow="true" id="dtbRegistros" rendered="#{rptProcedimentoBean.registros != null}"
+		    		value="#{rptProcedimentoBean.registros}" var="item"
+		    		style="margin-top: 12px;width: 550px" emptyMessage="Nenhum registro encontrado.">
+<!-- 		    		<p:column headerText="id"> -->
+<!-- 		    			<h:outputText value="#{item.id}" /> -->
+<!-- 		    		</p:column> -->
+		    		<p:column headerText="Descrição">
+		    			<h:outputText value="#{item.dsDescricao}" />
+		    		</p:column>
+		    		<p:column headerText="Total">
+		    			<h:outputText value="#{item.total}" />
+		    		</p:column>    		
+		    	</p:dataTable>
+			</div>			
+	    	
+    	</h:form>
+    </ui:define>
+</ui:composition>

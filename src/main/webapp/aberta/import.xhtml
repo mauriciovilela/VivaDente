@@ -1,0 +1,38 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    
+    xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Erro</ui:define>
+	
+	<ui:define name="corpo">
+	
+		<h:form id="frmPesquisa">
+			<p:commandLink update="@form" ajax="true" action="#{importacaoMB.realizarImportacao}">
+				<i class="fa fa-fw fa-check"></i><span>Importar</span>
+			</p:commandLink>	    		
+   		
+	    	<p:dataTable reflow="true" id="dtbRegistros" value="#{importacaoMB.lista}" var="item"
+	    		style="margin-top: 12px" emptyMessage="Nenhum registro encontrado.">
+	    		<p:column headerText="nome">
+	    			<h:outputText value="#{item.dsNome}" />
+	    		</p:column>
+	    		<p:column headerText="end.">
+	    			<h:outputText value="#{item.dsEndereco}" />
+	    		</p:column>
+	    		<p:column headerText="email">
+	    			<h:outputText value="#{item.dsEmail}" />
+	    		</p:column>
+	    		<p:column headerText="fone">
+	    			<h:outputText value="#{item.dsFone}" />
+	    		</p:column>
+	    		<p:column headerText="cel.">
+	    			<h:outputText value="#{item.dsCelular}" />
+	    		</p:column>
+	    	</p:dataTable>
+	    </h:form>
+	</ui:define>
+</ui:composition>

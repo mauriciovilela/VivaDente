@@ -1,0 +1,76 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">Relatórios</ui:define>
+    
+    <ui:define name="corpo">
+    	<h:form id="frmPesquisa">
+
+	    	<p:messages autoUpdate="true" closable="true" />
+	 
+	    	<p:panelGrid columns="2" id="painel" >
+				
+				<f:facet name="header"> 
+				       Relatório de Inadimplentes (Laboratório)
+				</f:facet>	    			
+	    		
+	    	</p:panelGrid>
+	    	
+	    	<p:dataTable id="dtbRegistros" value="#{rptInadimplentesLabBean.filtrados}" var="item"
+	    		style="margin-top:10px;" emptyMessage="Nenhum registro encontrado." rows="30"
+	    		paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom" reflow="true">
+	    		<p:column headerText="Cliente">
+	    			<h:outputText value="#{item.tbDentista.dsNome}" />
+	    		</p:column>
+	    		<p:column headerText="Paciente">
+	    			<h:outputText value="#{item.nomePaciente}" />
+	    		</p:column>	    		
+	    		<p:column headerText="Serviço">
+	    			<h:outputText value="#{item.dsServico}" />
+	    		</p:column>	    		
+	    		<p:column headerText="Obs.">
+	    			<h:outputText value="#{item.dsDescricao}" />
+	    		</p:column>	    		
+	    		<p:column headerText="Histórico" style="width: 165px;text-align: left">
+	    			<p:commandLink actionListener="#{rptInadimplentesLabBean.modalHistoricoPagamento(item.tbDentista.id, item.nomePaciente)}"
+			        	process="@this" title="Histórico de pagamentos" style="margin-left:7px;">
+			        		<i class="fa fa-money"></i> Pagamentos</p:commandLink>    				
+    			</p:column>		
+	    		<p:column headerText="Data">
+	    			<h:outputText value="#{item.dtEntrada}" >
+	    				<f:convertDateTime pattern="dd/MM/yyyy" />
+	    			</h:outputText>
+	    		</p:column>
+	    		<p:column headerText="Valor Total">
+	    			<h:outputText value="#{item.vlTotal}" >
+	    				<f:convertNumber type="currency"/>
+	    			</h:outputText>	    		
+	    		</p:column>
+	    		<p:column headerText="Valor Pago">
+	    			<h:outputText value="#{item.vlPago}" >
+	    				<f:convertNumber type="currency"/>
+	    			</h:outputText>	    		
+	    		</p:column>
+	    		<p:column headerText="Valor Restante" style="color: red">
+	    			<h:outputText value="#{rptInadimplentesLabBean.valorRestante(item)}" >
+	    				<f:convertNumber type="currency"/>
+	    			</h:outputText>
+	    		</p:column>
+	    	</p:dataTable>
+	    	
+	    	<p:confirmDialog header="Confirmação" 
+	    		message="Pagamento confirmado?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide();"
+	    			action="#{rptInadimplentesLabBean.confirmar}" process="@this"
+	    			update=":frmPesquisa:dtbRegistros" />
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" />
+	    	</p:confirmDialog>
+	    	
+    	</h:form>
+    </ui:define>
+</ui:composition>

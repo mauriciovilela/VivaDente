@@ -1,0 +1,38 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:o="http://omnifaces.org/ui">
+
+    <ui:define name="titulo">#{saidaBean.editando ? 'Edição de registro' : 'Novo registro'}</ui:define>
+    
+    <ui:define name="corpo">
+    
+    	<f:metadata>
+    		<f:event listener="#{saidaBean.inicializar}" type="preRenderView" />
+    	</f:metadata>
+    	
+   		<h:outputScript library="js" name="jquery.maskMoney.js"  />
+   		
+    	<h:form>
+	    	<p:messages autoUpdate="true" closable="true" />
+	    	
+	    	<p:panelGrid columns="2" id="painel" style="width: 100%; ">
+				
+				<!-- Título -->
+				<f:facet name="header"> 
+					Importação
+				</f:facet>
+
+	    		<!-- Botões -->
+	    		<f:facet name="footer">
+	    			<p:commandButton value="Importar" id="botaoSalvar"
+	    				action="#{importacaoBean.importar}" update="@form" icon="ui-icon-circle-check" />	    		
+	    		</f:facet>
+	    		
+	    	</p:panelGrid>
+    	</h:form>
+    </ui:define>
+</ui:composition>

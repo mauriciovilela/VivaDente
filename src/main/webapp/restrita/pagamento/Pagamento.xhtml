@@ -1,0 +1,217 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Pagamento</ui:define>
+
+	<ui:define name="corpo">
+
+		<f:metadata>
+			<o:viewParam name="agenda" value="#{pagamentoBean.agenda}" />
+			<f:event listener="#{pagamentoBean.inicializar}" type="preRenderView" />
+		</f:metadata>
+
+		<h:form id="frmPgto">
+		
+			<style type="text/css">
+				.valorTotal input { font-weight: bold !important; }
+				.valorPendente input { color: red !important; }
+				.valorAcrescimo input { color: blue !important; }
+			</style>
+
+			<f:passThroughAttribute name="autocomplete" value="off"/>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:focus for="idPaciente"></p:focus>
+    		
+			<p:panelGrid id="painel">
+
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="3">
+				       		Pagamento 
+						</p:column>
+					</p:row>  
+				</f:facet>
+
+				<p:row>
+					<p:column>
+						<p:outputLabel value="Paciente:" for="idPaciente" />
+					</p:column>
+					<p:column colspan="2">
+						<p:autoComplete id="idPaciente"
+							value="#{pagamentoBean.pagamento.tbPaciente}"
+							completeMethod="#{pacienteBean.pacientesPorNome}"
+							minQueryLength="2" cache="true" var="item"
+							itemLabel="#{item.dsNome}" itemValue="#{item}"
+							converter="pacienteConverterAC" forceSelection="true">
+							<p:ajax event="itemSelect" listener="#{pagamentoBean.verificaPendencias}" 
+								process="@this" update="@form" />
+						</p:autoComplete>
+					</p:column>
+				</p:row>
+
+				<p:row rendered="#{pagamentoBean.idDentista ne null}">
+					<p:column>
+						<p:outputLabel value="Dentista" for="idDentista" />
+					</p:column>
+					<p:column colspan="2">
+						<p:selectOneMenu id="idDentista" value="#{pagamentoBean.idDentista}" >
+							<f:selectItem itemLabel="" itemValue="" />
+							<f:selectItems value="#{homeMB.dentistas}" var="item"
+								itemLabel="#{item.dsNome}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<p:outputLabel value="Valor Total" for="vlTotal" />
+					</p:column>
+					<p:column colspan="2">
+						<pe:inputNumber id="vlTotal" maxlength="10" readonly="#{pagamentoBean.pagamento.id ne null}"
+							value="#{pagamentoBean.pagamento.vlTotal}" styleClass="valorTotal">
+						</pe:inputNumber>
+					</p:column>
+					<p:column>
+						<p:commandLink onclick="PF('dlgAdicionar').show(); return false;" 
+							rendered="#{not empty pagamentoBean.historico}" 
+							style="position: absolute;left: 520px;top: 181px;">
+							<i class="fa fa-fw fa-plus"></i> Acrescentar Valor</p:commandLink>						
+					</p:column>
+				</p:row>
+
+				<p:row rendered="#{not empty pagamentoBean.historico}">
+					<p:column>
+						<p:outputLabel value="Histórico Pagamentos" for="outHist" />
+					</p:column>
+					<p:column colspan="2">
+						<p:outputPanel id="outHist" >
+				            <p:dataTable var="item" value="#{pagamentoBean.historico}" 
+				            	emptyMessage="Nenhum registro encontrado" paginator="false" 
+				            	style="width: 180px;">
+					    		<p:column headerText="Data">
+					    			<h:outputText value="#{item.dtEntrada}" >
+					    				<f:convertDateTime pattern="dd/MM/yy" />
+					    			</h:outputText>
+					    		</p:column>		    		
+					    		<p:column headerText="Pago R$">
+					    			<h:outputText value="#{item.vlPago}" >
+										<f:convertNumber pattern="#0.00" />
+					    			</h:outputText>
+					    		</p:column>		  
+				            </p:dataTable>					
+						</p:outputPanel>
+					</p:column>
+				</p:row>
+
+				<p:row rendered="#{pagamentoBean.pagamento.id ne null}">
+					<p:column>
+						<p:outputLabel value="Valor Restante a pagar" for="vlRest" />
+					</p:column>
+					<p:column colspan="2">
+		    			<h:outputText id="vlRest" value="#{pagamentoBean.vlValorAPagar}" 
+		    				rendered="#{pagamentoBean.pagamento.id ne null}" style="color: red;" >
+							<f:convertNumber pattern="#0.00" />
+		    			</h:outputText>				
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<p:outputLabel value="Valor Pago" for="vlPago" />
+					</p:column>
+					<p:column colspan="2">
+						<pe:inputNumber id="vlPago" maxlength="10"
+							value="#{pagamentoBean.pagamento.vlPago}" styleClass="valorPendente" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<p:outputLabel value="Data" for="dtEntrada" />
+					</p:column>
+					<p:column colspan="2">
+						<p:calendar id="dtEntrada" pattern="dd/MM/yyyy" mask="true"
+							value="#{pagamentoBean.pagamento.dtEntrada}" locale="pt" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<p:outputLabel value="Observação" for="dsObservacao" />
+					</p:column>
+					<p:column colspan="2">
+						<p:inputTextarea id="dsObservacao" maxlength="150"
+							value="#{pagamentoBean.pagamento.dsObservacao}" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<p:outputLabel for="botoes" />
+					</p:column>
+					<p:column colspan="2">
+						<p:outputPanel id="botoes">
+							<p:commandLink id="lnkPesquisar" update="@form"
+								action="#{pagamentoBean.validarSalvar}">
+								<i class="fa fa-fw fa-check"></i>
+								<span>Salvar</span>
+							</p:commandLink>
+							<p:link outcome="/restrita/pagamento/PagamentoPesquisa">
+								<i class="fa fa-fw fa-search"></i>
+								<span>Pesquisar Pagamentos</span>
+							</p:link>
+						</p:outputPanel>
+					</p:column>
+				</p:row>
+
+			</p:panelGrid>
+
+			<p:confirmDialog header="Atenção" widgetVar="confirmacao"
+				id="confirmacaoDialog">
+				<f:facet name="message">
+			        Já existe um pagamento deste valor<br /> 
+			        para este paciente nesta data.<br />
+					<br />
+			        Inserir novo pagamento?
+			    </f:facet>
+				<p:commandButton value="Sim" oncomplete="confirmacao.hide();"
+					action="#{pagamentoBean.salvar}" process="@this" update="@form" />
+				<p:button value="Não"
+					onclick="PF('confirmacao').hide(); return false;" />
+			</p:confirmDialog>
+
+			<p:dialog header="Acrescentar Valor" widgetVar="dlgAdicionar"
+				id="_dlgAdicionar" modal="true">
+				<p:outputPanel id="outAcrescimo">
+			    	<p:panelGrid columns="2">
+						
+						<p:outputLabel value="Valor" for="vlAcrescimo" />
+						<pe:inputNumber id="vlAcrescimo" maxlength="10"
+							value="#{pagamentoBean.vlAcrescimo}" styleClass="valorAcrescimo" />
+							
+						<p:outputLabel value="" for="out2" />	
+						<p:outputPanel id="out2" >
+			    			<p:commandLink style="margin-right: 5px;" 
+			    				actionListener="#{pagamentoBean.adicionarPagamento}"
+					        	process="outAcrescimo" update="@form"><i class="fa fa-fw fa-save"> </i> Salvar
+					       	</p:commandLink>				
+			    			<p:commandLink style="margin-right: 5px;" 
+			    				onclick="PF('dlgAdicionar').hide(); return false;">
+			    				<i class="fa fa-fw fa-close"> </i> Fechar
+					       	</p:commandLink>				
+						</p:outputPanel>			    		
+			    	</p:panelGrid>					
+				</p:outputPanel>
+			</p:dialog>
+			
+		</h:form>
+	</ui:define>
+</ui:composition>

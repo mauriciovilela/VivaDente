@@ -1,0 +1,48 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">Relatórios</ui:define>
+    
+    <ui:define name="corpo">
+    
+    	<h:form id="frmPesquisa">
+    	
+    		<style type="text/css">
+    			.hasDatepicker {
+    				width: 80px !important;
+    			}
+    		</style>
+
+	    	<p:messages autoUpdate="true" closable="true" />
+	 
+	    	<p:panelGrid columns="6" id="painel">
+	    	
+				<f:facet name="header"> 
+					Relatório de Pagamentos
+				</f:facet>	    			
+				
+				<p:outputLabel value="Meses" for="Meses" />
+				<p:selectOneMenu id="Meses" value="#{rptPagamentosBean.dataSelecionada}">
+					<f:selectItem itemLabel="" itemValue="" />
+					<f:selectItems value="#{rptPagamentosBean.meses}" var="item"
+						itemLabel="#{item.mes}" itemValue="#{item.data}" />
+					<p:ajax event="change" listener="#{rptPagamentosBean.pesquisar}"
+					 	process="@this" update="@form" />														
+				</p:selectOneMenu>
+	    		
+	    	</p:panelGrid>
+	    	
+			<p:outputPanel id="outChar" rendered="#{rptPagamentosBean.registros != null}">
+				<p:chart type="pie" model="#{rptPagamentosBean.registros}" 
+					style="width:400px;height:300px" />
+			</p:outputPanel>
+	    	
+    	</h:form>
+    
+    </ui:define>
+    
+</ui:composition>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+	<title>Clínica - Login</title>
+	<link rel="shortcut icon" href="/VivaDente/resources/images/favicon.jpg" type="image/x-icon" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />	
+	<h:outputStylesheet library="css" name="sistema.css" />
+</h:head>
+
+<h:body onload="PF('dlg').show();">
+	<h:form id="formLogin" enctype="multipart/form-data">
+	
+		<p:defaultCommand target="btnLogin" />
+
+		<p:messages autoUpdate="true" showDetail="false" />
+
+		<p:ajaxStatus onstart="PF('ajaxLoading').show();"
+			onsuccess="PF('ajaxLoading').hide();" />
+
+		<p:dialog widgetVar="ajaxLoading" header=""   
+		        draggable="false" closable="false" modal="true">
+		        <h:graphicImage library="images" name="carregando.gif"/>  
+		</p:dialog>  	
+
+		<p:panel legend="Login" styleClass="login">
+
+			<p:dialog widgetVar="dlg" header="Login"  closable="false"
+				resizable="false" modal="true" closeOnEscape="true" responsive="true">
+				
+				<p:focus for="username"></p:focus>
+					
+				<p:panelGrid columns="2" cellpadding="2">
+					
+					<h:outputLabel for="username" value="Usuário:" />
+					<p:inputText id="username" value="#{loginMB.login}" 
+						label="username" style="width: 120px" />
+	
+					<h:outputLabel for="password" value="Senha:" />
+					<p:password id="password" value="#{loginMB.senha}" 
+						label="password" style="width: 120px" />
+	
+					<p:outputLabel for="botoes"/>
+		    		<p:outputPanel id="botoes">
+ 							<p:commandLink id="btnLogin" action="#{loginMB.realizarLogin}" >
+ 								<i class="fa fa-fw fa-lock"></i>Entrar
+ 							</p:commandLink>				 								
+					</p:outputPanel>
+				</p:panelGrid>					
+				
+			</p:dialog>
+
+		</p:panel>
+
+	</h:form>
+
+</h:body>
+</html>

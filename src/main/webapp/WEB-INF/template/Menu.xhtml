@@ -1,0 +1,17 @@
+					
+			<pm:header title="Menu" >
+                <p:commandButton id="btn-basic" icon="ui-icon-bars" type="button"
+                	styleClass="ui-btn-right ui-btn-inline" />
+            </pm:header>			  
+			
+			<p:overlayPanel style="width: 200px;" for="btn-basic" at="left" showEffect="overlay">
+				<p:menu>
+				    <p:submenu label="Financeiro">
+				        <p:menuitem value="Pagamentos" outcome="pm:pagina3" />
+				        <p:menuitem value="Despesas" url="" />
+				    </p:submenu>
+				    <p:submenu label="Consulta">
+				        <p:menuitem value="Agenda" outcome="/mobile/agenda/Agenda.xhtml" />
+				    </p:submenu>
+				</p:menu>	
+			</p:overlayPanel>	

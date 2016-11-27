@@ -1,0 +1,118 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">Laboratório</ui:define>
+    
+    <ui:define name="corpo">
+    	<h:form id="frmPesquisa">
+		
+			<f:passThroughAttribute name="autocomplete" value="off"/>
+
+	    	<p:messages autoUpdate="true" closable="true" />
+	 
+	    	<p:panelGrid columns="2" id="painel" >
+				
+				<f:facet name="header"> 
+				       Pesquisa de Laboratório 
+				</f:facet>	    			
+						    		  			    			
+				<p:outputLabel value="Cliente" for="idDentista" />
+				<p:selectOneMenu id="idDentista" value="#{laboratorioBeanPesquisa.filtro.idDentista}" filter="true">
+					<f:selectItem itemLabel="" itemValue="" />
+					<f:selectItems value="#{homeMB.proteticos}" var="item"
+						itemLabel="#{item.dsNome}" itemValue="#{item.id}" />
+					<p:ajax event="change" listener="#{laboratorioBeanPesquisa.pesquisar}"
+					 	process="@this" update="@form" />														
+				</p:selectOneMenu>
+	 
+				<p:outputLabel value="Paciente:" for="idPaciente" />
+	    		<p:inputText id="idPaciente" maxlength="100" value="#{laboratorioBeanPesquisa.filtro.nomePaciente}"/>
+						       		
+	    		<p:outputLabel value="Serviço" for="nome"/>
+	    		<p:inputText id="nome" value="#{laboratorioBeanPesquisa.filtro.nome}" />
+						    		
+	    		<p:outputLabel for="botoes"/>
+	    		<p:outputPanel id="botoes">
+					<p:commandLink id="lnkPesquisar" update="@form" action="#{laboratorioBeanPesquisa.pesquisar}">
+						<i class="fa fa-fw fa-search"></i><span>Pesquisar</span>
+					</p:commandLink>
+					<p:link outcome="/restrita/laboratorio/Laboratorio">
+						<i class="fa fa-fw fa-plus"></i><span>Novo</span>
+					</p:link>
+	    		</p:outputPanel>
+	    		
+	    		<p:defaultCommand target="lnkPesquisar" />
+	    			    		
+	    	</p:panelGrid>
+	    	
+	    	<p:dataTable sortBy="#{item.tbLaboratorio.id}" id="dtbRegistros" 
+	    		value="#{laboratorioBeanPesquisa.filtrados}" var="item"
+	    		style="margin-top: 0px" emptyMessage="Nenhum registro encontrado." rows="13"
+	    		paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+	    		<p:column style="width: 15px; text-align: center">
+	    			<p:commandLink title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+	    					process="@this" update=":frmPesquisa:confirmacaoExclusaoDialog">
+	    					<i class="fa fa-fw fa-trash"></i> 
+						<f:setPropertyActionListener target="#{laboratorioBeanPesquisa.selecionado}" 
+	    					value="#{item}" />	    					
+	    			</p:commandLink>		    			
+	    		</p:column>
+	    		<p:column headerText="Laboratório">
+	    			<h:outputText value="#{item.tbDentista.dsNome}" />
+	    		</p:column>
+	    		<p:column headerText="Serviço">
+	    			<h:outputText value="#{item.dsServico}" />
+	    		</p:column>
+	    		<p:column headerText="Obs.">
+	    			<h:outputText value="#{item.dsDescricao}" />
+	    		</p:column>	    		
+	    		<p:column headerText="Paciente">
+	    			<h:outputText value="#{item.nomePaciente}" />
+	    		</p:column>
+	    		<p:column headerText="Data">
+	    			<h:outputText value="#{item.dtEntrada}" >
+	    				<f:convertDateTime pattern="dd/MM/yyyy" />
+	    			</h:outputText>
+	    		</p:column>
+	    		<p:column headerText="Total">
+	    			<h:outputText value="#{item.vlTotal}" >
+	    				<f:convertNumber type="currency"/>
+	    			</h:outputText>	    		
+	    		</p:column>
+	    		<p:column headerText="Pago">
+	    			#{laboratorioBeanPesquisa.acumulaValor(item.vlPago)}
+	    			<h:outputText value="#{item.vlPago}" >
+	    				<f:convertNumber type="currency"/>
+	    			</h:outputText>	    		
+	    		</p:column>
+		    		<p:column headerText="Restante">
+		    			<h:outputText value="#{item.vlTotal - item.vlPago}" >
+							<f:convertNumber type="currency"/>
+		    			</h:outputText>
+		    		</p:column>		    		
+				<p:summaryRow>
+					<p:column colspan="9" style="text-align: right;color: red">
+						<h:outputText value="Valor Restante:  " />
+						<h:outputText value="#{item.vlTotal - laboratorioBeanPesquisa.valorAcumulado}">
+							<f:convertNumber type="currency"/>
+						</h:outputText>
+					</p:column>
+				</p:summaryRow>	    		
+	    	</p:dataTable>
+	    	
+	    	<p:confirmDialog header="Exclusão" 
+	    		message="Tem certeza que deseja excluir ?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide()"
+	    			action="#{laboratorioBeanPesquisa.excluir}" process="@this"
+	    			update=":frmPesquisa:dtbRegistros" />
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" />
+	    	</p:confirmDialog>
+	    	
+    	</h:form>
+    </ui:define>
+</ui:composition>

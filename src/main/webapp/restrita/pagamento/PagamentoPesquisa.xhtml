@@ -1,0 +1,89 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">Pagamentos</ui:define>
+    
+    <ui:define name="corpo">
+    	<h:form id="frmPesquisa">
+
+	    	<p:messages autoUpdate="true" closable="true" />
+	 
+	    	<p:panelGrid columns="2" id="painel">
+				
+				<f:facet name="header"> 
+					Pesquisa de Pagamentos 
+				</f:facet>	    		
+					
+				<p:outputLabel value="Paciente:" for="idPaciente" />
+				<p:autoComplete id="idPaciente"
+					value="#{pagamentoBeanPesquisa.tbPaciente}"
+					completeMethod="#{pacienteBean.pacientesPorNome}"
+					minQueryLength="2" cache="true" var="item"
+					itemLabel="#{item.dsNome}" itemValue="#{item}"
+					converter="pacienteConverterAC" forceSelection="true">
+					<p:ajax event="itemSelect" listener="#{pagamentoBeanPesquisa.pesquisar}" 
+						process="@this" update="@form" />					
+				</p:autoComplete>
+				
+				<p:focus for="idPaciente"></p:focus>
+	    		
+	    	</p:panelGrid>
+    
+	    	<p:dataTable sortBy="#{item.tbPagamento.id}" id="dtbRegistros" value="#{pagamentoBeanPesquisa.filtrados}" 
+	    		var="item" emptyMessage="Nenhum registro encontrado.">
+	    		<p:column style="width: 35px; text-align: center">
+	    			<p:commandLink title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+	    					process="@this" update=":frmPesquisa:confirmacaoExclusaoDialog">
+	    					<i class="fa fa-fw fa-trash"></i>
+						<f:setPropertyActionListener target="#{pagamentoBeanPesquisa.selecionado}" 
+	    					value="#{item}" />	    					
+	    			</p:commandLink>		    			
+	    		</p:column>
+	    		<p:column headerText="Paciente">
+	    			<h:outputText value="#{item.tbPaciente.dsNome}" />
+	    		</p:column>
+	    		<p:column headerText="Observação">
+	    			<h:outputText value="#{item.dsObservacao}" />
+	    		</p:column>
+	    		<p:column headerText="Data">
+	    			<h:outputText value="#{item.dtEntrada}" >
+	    				<f:convertDateTime pattern="dd/MM/yyyy" />
+	    			</h:outputText>
+	    		</p:column>
+	    		<p:column headerText="Total">
+	    			<h:outputText value="#{item.vlTotal}" >
+	    				<f:convertNumber type="currency"/>
+	    			</h:outputText>	    		
+	    		</p:column>
+	    		<p:column headerText="Pago" style="text-align: right;width: 85px">
+	    			#{pagamentoBeanPesquisa.acumulaValor(item.vlPago)}
+	    			<h:outputText value="#{item.vlPago}" >
+	    				<f:convertNumber type="currency"/>
+	    			</h:outputText>	    		
+	    		</p:column>	    		
+				<p:summaryRow>
+					<p:column colspan="6" style="text-align: right;color: red">
+						<h:outputText value="Valor Restante:  " />
+						<h:outputText value="#{item.vlTotal - pagamentoBeanPesquisa.valorAcumulado}">
+							<f:convertNumber type="currency" currencySymbol="R$" />
+						</h:outputText>
+					</p:column>
+				</p:summaryRow>	    		
+	    	</p:dataTable>
+	    	
+	    	<p:confirmDialog header="Exclusão" 
+	    		message="Tem certeza que deseja excluir ?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide();"
+	    			action="#{pagamentoBeanPesquisa.excluir}" process="@this"
+	    			update=":frmPesquisa:dtbRegistros" />
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" />
+	    	</p:confirmDialog>
+	    	
+    	</h:form>
+    </ui:define>
+</ui:composition>

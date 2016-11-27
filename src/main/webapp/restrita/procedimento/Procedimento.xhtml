@@ -1,0 +1,44 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:o="http://omnifaces.org/ui">
+
+    <ui:define name="titulo">#{procedimentoBean.editando ? 'Edição de registro' : 'Novo registro'}</ui:define>
+    
+    <ui:define name="corpo">
+    	<f:metadata>
+    		<o:viewParam name="procedimento" value="#{procedimentoBean.procedimento}" />
+    		<f:event listener="#{procedimentoBean.inicializar}" type="preRenderView" />
+    	</f:metadata>
+    
+    	<h:form>
+
+	    	<p:messages autoUpdate="true" closable="true" />
+	    	
+	    	<p:panelGrid columns="2" id="painel">
+	    						
+				<f:facet name="header"> 
+				    #{procedimentoBean.editando ? 'Edição de registro' : 'Novo registro'}
+				</f:facet>	    
+				
+	    		<p:outputLabel value="Nome" for="dsNome"/>
+	    		<p:inputText id="dsNome" maxlength="100" value="#{procedimentoBean.procedimento.dsDescricao}"/>	
+	    		  			    			
+	    		<p:outputLabel for="botoes"/>
+	    		<p:outputPanel id="botoes">
+					<p:commandLink id="lnkSalvar" update="@form" action="#{procedimentoBean.salvar}">
+						<i class="fa fa-fw fa-check"></i><span>Salvar</span>
+					</p:commandLink>
+					<p:link outcome="/restrita/procedimento/ProcedimentoPesquisa">
+						<i class="fa fa-fw fa-arrow-circle-left"></i><span>Voltar</span>
+					</p:link>
+	    		</p:outputPanel>
+	    		
+	    	</p:panelGrid>
+    	</h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,53 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:o="http://omnifaces.org/ui">
+
+    <ui:define name="titulo">Alterar Senha</ui:define>
+    
+    <ui:define name="corpo">
+    	<f:metadata>
+    		<o:viewParam name="usuario" value="#{usuarioTrocaSenhaBean.usuario}" />
+    		<f:event listener="#{usuarioTrocaSenhaBean.inicializar}" type="preRenderView" />
+    	</f:metadata>
+    
+    	<h:form>
+
+	    	<p:messages autoUpdate="true" closable="true" />
+	    	
+	    	<p:panelGrid columns="2" id="painel" style="width: 40%; ">
+	    						
+				<f:facet name="header"> 
+				    Alteração de Senha
+				</f:facet>	    
+				
+				<p:outputLabel value="Usuário" for="idUsuario" />  
+		        <p:selectOneMenu filter="true" id="idUsuario" value="#{usuarioTrocaSenhaBean.usuario.id}" 
+		        	disabled="true">  
+		            <f:selectItems value="#{homeMB.usuarios}"
+		            	var="item" itemLabel="#{item.dsNome}" itemValue="#{item.id}" />  
+		        </p:selectOneMenu> 	
+
+	    		<p:outputLabel value="Senha" for="dsSenha"/>
+	    		<p:password id="dsSenha" maxlength="100" value="#{usuarioTrocaSenhaBean.senha}"/>
+	    			
+	    		<p:outputLabel value="Confirmação Senha" for="dsSenhaConf"/>
+	    		<p:password id="dsSenhaConf" maxlength="100" value="#{usuarioTrocaSenhaBean.senhaConf}"/>
+	    
+	    		<p:outputLabel for="botoes"/>
+	    		<p:outputPanel id="botoes">
+					<p:commandLink id="lnkSalvar" update="@form" action="#{usuarioTrocaSenhaBean.salvar}">
+						<i class="fa fa-fw fa-check"></i><span>Salvar</span>
+					</p:commandLink>
+					<p:link outcome="/restrita/usuario/Usuario">
+						<i class="fa fa-fw fa-remove"></i><span>Limpar</span>
+					</p:link>
+	    		</p:outputPanel>
+	    			    		
+	    	</p:panelGrid>
+    	</h:form>
+    </ui:define>
+</ui:composition>

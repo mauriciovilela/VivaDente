@@ -1,0 +1,310 @@
+@charset "utf-8";
+
+/* BASE */
+body {
+	margin: 0;
+	font-size: 13px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#conteudo {
+	padding: 0px 8px
+}
+
+#login-dialog {
+	width: 290px;
+	margin: auto;
+	margin-top: 150px;
+}
+
+.grid-login {
+	background-color: #f2f2f2;
+	border-radius: 8px;
+	border: 1px solid #ccc;
+	margin-top: 8px;
+	padding: 10px
+}
+
+.rotulo {
+	width: 150px
+}
+
+.verde { color: green !important; }
+.vermelha { color: red !important; }
+.emDestaque { color: red !important;font-weight: bold !important; }
+
+.agendaConfirmado { color: white !important; background: #008000 !important; border: 1px solid #778899 !important; }
+.agendaMarcado { color: white !important; background: #778899 !important; border: 1px solid #778899 !important; }
+.agendaFalta { color: white !important; background: crimson !important;  border: 1px solid crimson !important; }
+.agendaFaltaDentista { color: white !important; background: #ff8000 !important;  border: 1px solid #ff8000 !important; }
+.agendaRemarcado { color: white !important; background: darkcyan !important;  border: 1px solid darkcyan !important; }
+.legendaAgenda { margin-left: 4px;margin-top: 10px;padding-bottom: 10px; }
+.legendaAgendaItem { display: inline-flex;width: 10px;height: 10px; }
+
+.totalLiquido { padding-top: 7px; font-size: 14px; color: green; font-weight: bold; }
+.totalBruto { padding-top: 7px; font-size: 14px; color: red; font-weight: bold; }
+
+.destaque1 { background: #FFCCCC !important; }
+.destaque2 { background: #FFCC99 !important; }
+
+/* ALINHANDO O CABEÇALHO DOS FACET = HEADER */
+.ui-widget-header td {
+	text-align: left;
+}
+
+/* REMOVENDO AS BORDAS DAS CELULAS DAS TABELAS */
+.painelSemborda td {
+	height: 34px;
+	border-style: none !important;
+	padding: 2px 10px !important;
+}
+
+/* REMOVENDO AS BORDAS ARRENDONDADAS */
+.ui-corner-all {
+	-webkit-border-radius: 0px;
+	border-radius: 0px; 
+}
+
+/* DIMINUINDO TAMANHO ICONE */
+.ui-button-icon-only {
+	height: 22px !important;
+	width: 24px !important;
+}
+
+/* COMBO */
+.ui-selectonemenu {
+	min-width: 180px;	
+}
+
+.maiusculoTextArea {
+	text-transform: uppercase;
+	width:288px;
+	height: 90px;
+}
+
+.maiusculo {
+	text-transform: uppercase;
+}
+
+.minusculo {
+	text-transform: lowercase;
+}
+
+.ui-panelgrid {
+	border-collapse: inherit !important;
+}
+
+.ajax-status {
+	position: fixed;
+	top: 55px;
+	right: 10px;
+	width: 35px;
+	height: 35px
+}
+
+.ui-selectmanycheckbox td {
+	border-width: 0px !important;
+	padding: 0px !important;
+}
+
+.ui-selectmanycheckbox td label {
+	padding-right: 10px;
+}
+
+.produto-tabela input {
+	width: 99%;
+}
+
+/* Customiza TabView - início */
+.ui-tabs .ui-tabs-panel {
+	padding: 0.5em 0.2em !important;
+}
+
+.ui-tabs {
+	padding: 0px !important;
+}
+
+.ui-tabs .ui-tabs-nav {
+	margin: -1px !important;
+}
+
+.ui-tabs.ui-tabs-top>.ui-tabs-nav {
+	padding: 0px !important;
+}
+/* Customiza TabView - fim */
+
+/* Menu sistema inicio */
+.menu-sistema {
+	border: 0px !important;
+	padding: 0px !important;
+	background: none !important;
+}
+
+.menu-sistema .ui-menu-parent>a .ui-menuitem-text, .menu-sistema>.ui-menu-list>.ui-menuitem>a>.ui-menuitem-text
+	{
+	color: #ffffff !important;
+}
+
+.menu-sistema .ui-icon-triangle-1-s {
+	background: url(#{ resource [ 'images:seta-para-baixo.png' ]
+}
+)
+no-repeat
+;
+
+
+}
+/* Menu sistema fim */
+
+/* Dados das mensagem na tela principal */
+#dtbMensagens_content {
+	background: #FFF none repeat scroll 0% 0% !important;
+	border: none;
+}
+
+.grid-modal { margin-top: 5px; }
+.grid-modal .ui-datatable-tablewrapper table thead tr th {
+	background: white !important;
+	font-weight: bold;
+}
+
+.ui-datatable-tablewrapper table thead tr th {
+	background: #ebedf0 !important;
+}
+
+.ui-datatable-tablewrapper table thead tr {    
+    border: 0px;
+}
+
+.ui-panelgrid .ui-panelgrid-cell {
+	border-width: 0px !important;
+}
+
+/*
+.ui-widget-content {
+	background: white;
+	border-bottom: 1px solid #bbb1aa !important;
+	border-right: 1px solid #bbb1aa !important;
+}
+
+input[type="button"] > .ui-state-hover {
+	background: #1e94d2 !important;
+	color: white !important;
+}
+*/
+
+.ui-panelgrid .ui-panelgrid-cell {
+	border-width: 0px !important;
+	padding: 5px 3px 8px 4px !important
+}
+
+/* fontawesome - Tamanho icone */
+.fa-fw {
+	font-size: 15px !important;
+}
+
+.ui-commandlink span {
+	padding-left: 4px;
+	padding-right: 3px;
+}
+
+.ui-commandlink, .ui-link {
+	text-decoration: none !important;
+}
+
+/* Dados do componente schedule */
+.fc-event {
+	color: white !important;
+}
+
+.fc-time-grid-container {
+	height: 912px !important;
+}
+
+.fc th, .fc td {
+	border: 1px solid #d5d5d5;
+}
+
+/* login */
+
+.login {
+	width: 330px;
+	position: absolute;
+	top:50%; 
+	margin-top:-100px;
+	left:47%;
+	margin-left:-160px;
+}
+
+.TituloAcessoNegado {
+	font-weight: bold;
+	font-size: 14px;
+	color; red;
+}
+
+@media (max-width: 640px) {
+	.login {
+		width: 96%;
+		position: relative;
+		top: 1%;
+		left:1%;
+		margin-top:1px;
+		margin-left:1px;
+	}
+}
+
+.cabecalho {
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    left: 40px;
+    color: white;
+}
+
+.ui-growl {
+	top: 60px !important;
+}
+
+.semFluxoCaixa {
+	background: #e6c6af;
+}
+
+/* sombra de modal */
+.ui-shadow {
+	/*box-shadow: 0px 1px 2px rgba(0,0,0,0.8) !important;*/
+	box-shadow: 0px 1px 2px rgba(0,0,0,0.3) !important;
+}
+/* funto titulo modal */
+.ui-dialog-titlebar {
+	background:  #ebedf0 !important;	
+}
+
+.ui-dialog-titlebar-close {
+    top: 5px !important;
+    right: 3px !important;
+}
+
+.fc-holiday {
+    background-color: #ff6666;
+    color: white;
+    font-weight: bold;
+    padding: 43px !important;
+}
+
+.botaoAgendaL1 { display: inline-block; width: 74px; white-space: nowrap; }
+.botaoAgendaL2 { display: inline-block; width: 96px; white-space: nowrap; }
+
+/*
+	FECHAMENTO DE CAIXA
+*/
+/* .hasDatepicker { width: 75px !important; } */
+.totalPagamentos { 	font-size: 16px; font-weight: bold; }
+.totalDespesas { font-size: 16px; font-weight: bold; }
+.divEsquerda { float: left; width: 49%; }
+.divDireita { float: right; width: 49%; }
+/* Mobile */
+@media (max-width: 640px) {
+	.divEsquerda, .divDireita {
+		width: 100% !important;
+	}
+}

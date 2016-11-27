@@ -1,0 +1,30 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">Relatórios</ui:define>
+    
+    <ui:define name="corpo">
+    	<h:form id="frmPesquisa">
+
+	    	<p:panelGrid columns="2" id="painel">
+				<f:facet name="header"> 
+					Relatórios
+				</f:facet>	    			
+	    	</p:panelGrid>
+	    	
+			<p:dataGrid columns="1" value="#{relatoriosBean.menuRelatorios}" var="item"
+				style="margin-top: 7px" >
+				<p:column>
+					<p:link outcome="#{item.dsPagina}">
+						<i class="#{item.dsIcone}"></i> #{item.dsFuncionalidade}
+					</p:link>
+				</p:column>
+			</p:dataGrid>
+				    	
+    	</h:form>
+    </ui:define>
+</ui:composition>

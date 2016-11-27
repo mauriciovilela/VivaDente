@@ -1,0 +1,308 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Agenda</ui:define>
+
+	<ui:define name="corpo">
+
+		<h:form id="frmAgenda">
+		
+			<style type="text/css">
+				.fc-scroller {
+					height: 430px !important;
+				}
+			</style>
+
+			<h:outputScript library="primefaces" name="schedule.js" />
+
+			<p:messages id="mensagens" showDetail="true" />
+			<p:growl id="growMD" globalOnly="true" showDetail="false"
+				escape="false" />
+
+			<p:sticky target="pnlDentistas" margin="40"
+				rendered="#{!homeMB.perfilDentista}" />
+
+			<p:outputPanel id="pnlDentistas" style="background: white;"
+				rendered="#{!homeMB.perfilDentista}">
+
+				<p:selectOneRadio id="idDentista" value="#{agendaBean.idDentista}"
+					layout="#{agendaBean.layoutRB}">
+					<f:selectItems value="#{homeMB.dentistas}" var="item"
+						itemLabel="#{item.dsNome}" itemValue="#{item.id}" />
+					<p:ajax listener="#{agendaBean.pesquisarPorDentista}"
+						update="outCalendario outLegenda outDialogRemarcar"></p:ajax>
+				</p:selectOneRadio>
+
+			</p:outputPanel>
+
+			<p:outputPanel id="pnlDentista" rendered="#{homeMB.perfilDentista}">
+
+				<p:selectOneRadio id="idDentista2" value="#{agendaBean.idDentista}">
+					<f:selectItems value="#{agendaBean.dentistas}" var="item"
+						itemLabel="#{item.dsNome}" itemValue="#{item.id}" />
+					<p:ajax listener="#{agendaBean.pesquisarPorDentista}"
+						update="outCalendario"></p:ajax>
+				</p:selectOneRadio>
+
+			</p:outputPanel>
+ 
+<!-- 		    <p:contextMenu for="_schCalendario"> -->
+<!-- 		        <p:menuitem value="Bloquear Agenda" update="@form" /> -->
+<!-- 		    </p:contextMenu> -->
+    
+			<p:outputPanel id="outCalendario">
+
+				<p:schedule id="_schCalendario" widgetVar="schCalendario"
+					rendered="#{agendaBean.listaAgenda != null}"
+					value="#{agendaBean.eventModel}" view="agendaWeek" locale="pt"
+					clientTimezone="timeZone=America/Sao_Paulo"
+					timeZone="America/Sao_Paulo" slotDuration="00:15:00"					
+					allDaySlot="false" minTime="07:30" maxTime="20:00" scrollTime="true"
+					axisFormat="H:mm" style="margin-top:10px">
+					<p:ajax event="dateSelect" listener="#{agendaBean.quandoNovo}"
+						update="outDialogAgenda :frmAgenda:outBotoesAgenda"
+						oncomplete="PF('dlgAgenda').show()"
+						disabled="#{homeMB.perfilDentista}" />
+					<p:ajax event="eventSelect"
+						listener="#{agendaBean.quandoSelecionado}"
+						update="outDialogAgenda" oncomplete="PF('dlgAgenda').show()" />
+					<p:ajax event="eventMove" listener="#{agendaBean.quandoMovido}"
+						update="growMD" oncomplete="PF('schCalendario').update()"
+						disabled="#{homeMB.perfilDentista}" />
+					<p:ajax event="eventResize"
+						listener="#{agendaBean.quandoRedimensionado}" update="mensagens"
+						oncomplete="PF('schCalendario').update()"
+						disabled="#{homeMB.perfilDentista}" />
+				</p:schedule>
+
+			</p:outputPanel>
+
+			<p:outputPanel id="outLegenda" styleClass="legendaAgenda">
+				<p:outputPanel rendered="#{agendaBean.listaAgenda != null}">
+					<h:outputLabel styleClass="agendaMarcado legendaAgendaItem" /> Marcado
+					<h:outputLabel styleClass="agendaConfirmado legendaAgendaItem" /> Confirmado
+					<h:outputLabel styleClass="agendaFalta legendaAgendaItem" /> Falta
+					<h:outputLabel styleClass="agendaRemarcado legendaAgendaItem" /> Remarcado
+					<h:outputLabel styleClass="agendaFaltaDentista legendaAgendaItem" /> Bloqueio Agenda
+				</p:outputPanel>
+			</p:outputPanel>
+
+			<p:dialog widgetVar="dlgAgenda" header="Agendar horário"
+				resizable="false" modal="true" closeOnEscape="true"
+				responsive="true">
+				<p:outputPanel id="outDialogAgenda">
+					<p:messages id="mensagensMD" showDetail="false" />
+
+					<p:panelGrid columns="2">
+
+						<p:outputLabel value="Paciente:" for="idPaciente" />
+						<p:autoComplete id="idPaciente"
+							value="#{agendaBean.paciente}"
+							readonly="#{agendaBean.agenda.id ne null}"
+							completeMethod="#{pacienteBean.pacientesPorNome}"
+							minQueryLength="2" cache="true" var="item"
+							itemLabel="#{item.dsNome}" itemValue="#{item}"
+							converter="pacienteConverterAC" forceSelection="true" >
+							<p:ajax event="itemSelect" listener="#{agendaBean.capturaTelefone}" 
+								process="@this" update=":frmAgenda:outDialogAgenda" />												
+						</p:autoComplete>	
+
+						<p:outputLabel for="dsFone" value="Telefone" 
+							rendered="#{ (agendaBean.paciente.dsFone ne null) or (agendaBean.paciente.dsCelular ne null)}" />
+						<h:outputText id="dsFone" value="#{agendaBean.paciente.dsFone} ** #{agendaBean.paciente.dsCelular}"
+							style="font-size: 14px;font-weight:bold"
+							 rendered="#{ (agendaBean.paciente.dsFone ne null) or (agendaBean.paciente.dsCelular ne null)}" />
+
+						<p:outputLabel for="btnHistorico" value="Histórico"></p:outputLabel>
+						<p:outputPanel id="btnHistorico">
+
+							<p:commandLink id="lnkHistPgto" process="@this idPaciente"
+								update="mensagensMD"
+								actionListener="#{agendaBean.modalHistoricoPagamento}">
+								<i class="fa fa-fw fa-money"></i> Pagamentos</p:commandLink>
+							<p:commandLink id="lnkHistAgenda" process="@this idPaciente"
+								update="mensagensMD"
+								actionListener="#{agendaBean.modalHistoricoConsulta}">
+								<i class="fa fa-fw fa-calendar"></i> Consultas</p:commandLink>
+
+						</p:outputPanel>
+
+						<p:outputLabel value="Procedimento" for="idProcedimento" />
+						<p:selectOneMenu filter="true" id="idProcedimento"
+							value="#{agendaBean.idProcedimento}">
+							<f:selectItems value="#{homeMB.procedimentos}" var="item"
+								itemLabel="#{item.dsDescricao}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel for="descricao" value="Observação:" />
+						<p:inputTextarea id="descricao" maxlength="200"
+							value="#{agendaBean.agenda.dsDescricao}" cols="26" rows="2" />
+
+						<p:outputLabel for="inicio" value="Data:" />
+						<p:calendar id="inicio" readonly="#{agendaBean.agenda.id ne null}"
+							value="#{agendaBean.agenda.dtInicio}" pattern="dd/MM/yyyy"
+							locale="pt" />
+
+						<p:outputLabel for="fim" value="Fim:" rendered="false" />
+						<p:calendar id="fim" rendered="false"
+							value="#{agendaBean.agenda.dtFim}" pattern="dd/MM/yyyy HH:mm"
+							locale="pt" />
+
+						<p:outputLabel for="horaInicio" value="Horário Início:" />
+						<p:inputMask id="horaInicio" value="#{agendaBean.horaInicio}"
+							readonly="#{agendaBean.agenda.id ne null}" mask="99:99" />
+
+						<p:outputLabel for="horaFim" value="Horário Fim:" />
+						<p:inputMask id="horaFim" value="#{agendaBean.horaFim}"
+							readonly="#{agendaBean.agenda.id ne null}" mask="99:99" />
+
+					</p:panelGrid>
+
+					<p:separator />
+
+					<p:outputPanel id="outBotoesAgenda" style="padding:3px;"
+						rendered="#{!homeMB.perfilDentista}">
+
+						<div>
+
+							<div class="botaoAgendaL1">
+								<p:commandLink process="outDialogAgenda"
+									actionListener="#{agendaBean.agendaSalvar}"
+									oncomplete="PF('schCalendario').update();"
+									update="mensagensMD growMD">
+									<i class="fa fa-fw fa-save"></i>Salvar</p:commandLink>
+							</div>
+							
+							<div class="botaoAgendaL1">
+				    			<p:link outcome="/restrita/pagamento/Pagamento">
+				    				<i class="fa fa-fw fa-dollar"></i>Pagar
+				    				<f:param name="agenda" value="#{agendaBean.agenda.id}" />
+				    			</p:link> 
+	    					</div>
+	    						    			
+							<div class="botaoAgendaL1" style="margin-left: -4px;">
+								<p:commandLink process="outDialogAgenda"
+									actionListener="#{agendaBean.agendaConfirmarPaciente}"
+									oncomplete="PF('schCalendario').update();"
+									disabled="#{agendaBean.agenda.id eq null or agendaBean.agenda.tbAgendaStatus.id == 6}"
+									update="mensagensMD growMD">
+									<i class="fa fa-fw fa-thumbs-o-up"></i>Confimar</p:commandLink>
+							</div>
+
+							<div class="botaoAgendaL1" style="margin-left: 5px;">
+								<p:commandLink process="outDialogAgenda"
+									actionListener="#{agendaBean.agendaRegistrarFalta}"
+									oncomplete="PF('schCalendario').update();"
+									disabled="#{agendaBean.agenda.id eq null}"
+									update="mensagensMD growMD">
+									<i class="fa fa-fw fa-close"></i>Falta</p:commandLink>
+							</div>
+
+						</div>
+
+						<div style="margin-top: 12px;">
+
+							<div class="botaoAgendaL2">
+								<p:commandLink process="outDialogAgenda"
+									actionListener="#{agendaBean.agendaDesmarcar}"
+									oncomplete="PF('schCalendario').update();"
+									disabled="#{agendaBean.agenda.id eq null}"
+									update="mensagensMD growMD">
+									<i class="fa fa-fw fa-thumbs-o-down"></i>Desmarcar</p:commandLink>
+							</div>
+
+							<div class="botaoAgendaL2">
+								<p:link onclick="PF('dlgRemarcar').show();return false;"
+									disabled="#{agendaBean.agenda.id eq null}">
+									<i class="fa fa-fw fa-level-up"></i>Remarcar</p:link>
+							</div>
+
+							<div class="botaoAgendaL2">
+								<p:commandLink process="outDialogAgenda"
+									actionListener="#{agendaBean.agendaExcluir}"
+									oncomplete="PF('schCalendario').update();"
+									disabled="#{agendaBean.agenda.id eq null}"
+									update="mensagensMD growMD">
+									<i class="fa fa-fw fa-trash"></i>Excluir</p:commandLink>
+							</div>
+
+						</div>
+
+					</p:outputPanel>
+
+				</p:outputPanel>
+
+			</p:dialog>
+
+			<p:dialog widgetVar="dlgRemarcar" header="Remarcar Paciente"
+				resizable="false" modal="true" closeOnEscape="true"
+				responsive="true">
+
+				<p:outputPanel id="outDialogRemarcar">
+					<p:panelGrid id="pnlRemarcar" columns="2">
+
+						<p:outputLabel value="Dentista" for="idDentistaRemarcar" />
+						<p:selectOneMenu id="idDentistaRemarcar"
+							value="#{agendaBean.idDentista}">
+							<f:selectItems value="#{homeMB.dentistas}" var="item"
+								itemLabel="#{item.dsNome}" itemValue="#{item.id}" />
+							<p:ajax event="change" listener="#{agendaBean.selecionaDentista}"
+							 	process="@this" update="outDialogRemarcar" />								
+						</p:selectOneMenu>
+
+						<p:outputLabel for="inicio2" value="Data:" />
+						<p:calendar id="inicio2" value="#{agendaBean.agenda.dtInicio}"
+							locale="pt" pattern="dd/MM/yyyy">
+							<p:ajax event="dateSelect" listener="#{agendaBean.consultaAgendaFutura}" update="dlgAgendaFuturaID" />
+						</p:calendar>	
+	
+						<p:outputLabel for="horaInicio2" value="Início 08 as 18h:" />
+						<p:inputMask id="horaInicio2" value="#{agendaBean.horaInicio}"
+							mask="99:99" style="width: 70px;" />
+
+						<p:outputLabel for="horaFim2" value="Fim 08 as 18h:" />
+						<p:inputMask id="horaFim2" value="#{agendaBean.horaFim}"
+							mask="99:99" style="width: 70px;" />
+
+						<p:outputLabel for="botao2" value="" />
+						<p:commandLink id="botao2" process="outDialogRemarcar"
+							actionListener="#{agendaBean.agendaRemarcar}"
+							oncomplete="PF('schCalendario').update();" update="growMD">
+							<i class="fa fa-fw fa-level-up"></i>Remarcar</p:commandLink>
+
+					</p:panelGrid>
+
+				</p:outputPanel>
+
+			</p:dialog>
+			
+			<p:dialog id="dlgAgendaFuturaID" widgetVar="dlgAgendaFutura" 
+				header="Agenda #{agendaBean.nomeDentista} #{agendaBean.dataDentista}"
+				resizable="false" closeOnEscape="true"
+				responsive="true" width="280">
+		        	<div class="grid-modal">
+			            <p:dataTable var="item" value="#{agendaBean.agendaFutura}" emptyMessage="Nenhum registro encontrado">
+				    		<p:column headerText="Data Agenda">
+				    			<h:outputText value="#{item.dtInicio}" >
+				    				<f:convertDateTime pattern="HH:mm" locale="pt" />  
+				    			</h:outputText> - 
+				    			<h:outputText value="#{item.dtFim}" >
+				    				<f:convertDateTime pattern=" HH:mm" locale="pt" />  
+				    			</h:outputText>
+				    		</p:column>		    		
+				    		<p:column headerText="Status" >
+				    			<h:outputText value="#{item.dsAgendaStatus}" />
+				    		</p:column>	  		
+			            </p:dataTable>
+		            </div>		
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

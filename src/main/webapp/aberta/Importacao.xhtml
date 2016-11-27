@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<link rel="shortcut icon" href="/VivaDente/resources/images/favicon.jpg" type="image/x-icon" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- CSS -->
+        <h:outputStylesheet library="css" name="sistema.css" />
+        <h:outputStylesheet library="css" name="components.css" />
+	</h:head>
+
+	<h:body>
+	
+    	<h:form>
+	    	
+			<p:commandLink id="lnkSalvar" update="dtbRegistros" action="#{importacaoMB.realizarImportacao}">
+				<i class="fa fa-fw fa-check"></i><span>Importar</span>
+			</p:commandLink>	    		
+   		
+	    	<p:dataTable reflow="true" id="dtbRegistros" value="#{importacaoMB.lista}" var="item"
+	    		style="margin-top: 12px" emptyMessage="Nenhum registro encontrado.">
+	    		<p:column headerText="nome">
+	    			<h:outputText value="#{item.dsNome}" />
+	    		</p:column>
+	    		<p:column headerText="end.">
+	    			<h:outputText value="#{item.dsEndereco}" />
+	    		</p:column>
+	    		<p:column headerText="email">
+	    			<h:outputText value="#{item.dsEmail}" />
+	    		</p:column>
+	    		<p:column headerText="fone">
+	    			<h:outputText value="#{item.dsFone}" />
+	    		</p:column>
+	    		<p:column headerText="cel.">
+	    			<h:outputText value="#{item.dsCelular}" />
+	    		</p:column>
+	    	</p:dataTable>
+	    		
+    	</h:form>			
+	
+	</h:body>
+	
+</html>

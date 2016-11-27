@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Agenda</title>
+		<style type="text/css">
+			body { font-size: 13px; }
+		</style>
+	</head>
+	<body>
+		<div style="color: darkgreen;font-weight:bold;">$dentista, segue sua agenda para amanhã ($data) ...</div>
+		<br />
+		<div style="color: darkred;font-weight:bold;">Total de $totalPacientes pacientes.</div>
+		<br />
+		<table>
+			<tr>
+				<td valign="top">
+					<table style="width: 100%" class="table">
+						<tr>
+							<th style="$bordas" nowrap="nowrap">Paciente</th>
+							<th style="$bordas">Procedimento(s)</th>
+							<th style="$bordas">Horário</th>
+						</tr>
+						#foreach( $item in $agendas )
+						<tr>
+							<td style="$bordas">$item.paciente</td>
+							<td style="$bordas">$item.procedimento</td>
+							<td style="$bordas">$item.horario</td>
+						</tr>
+						#end
+					</table>
+				</td>
+			</tr>
+		</table>
+
+	</body>
+</html>

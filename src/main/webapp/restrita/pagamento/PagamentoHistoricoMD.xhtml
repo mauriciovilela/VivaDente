@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+     
+    <h:head>
+    	<h:outputStylesheet library="css" name="sistema.css" />
+        <title>Histórico de pagamentos - #{pagamentoHistoricoMDBean.nome}</title>
+    </h:head>
+     
+    <h:body>
+    	<f:metadata>
+    		<f:event type="preRenderView" listener="#{pagamentoHistoricoMDBean.inicializar}" />
+    	</f:metadata>    
+    	
+        <h:form>     
+                     	          	
+        	<div class="grid-modal">
+	            <p:dataTable var="item" value="#{pagamentoHistoricoMDBean.historico}" 
+	            emptyMessage="Nenhum registro encontrado" paginator="false" sortBy="#{item.tbPagamento.id}">
+		    		<p:column headerText="Data">
+		    			<h:outputText value="#{item.dtEntrada}" >
+		    				<f:convertDateTime pattern="dd/MM/yy" />
+		    			</h:outputText>
+		    		</p:column>		    		
+		    		<p:column headerText="Valor Total">
+		    			<h:outputText value="#{item.vlTotal}" >
+							<f:convertNumber type="currency"/>
+		    			</h:outputText>
+		    		</p:column>		    		
+		    		<p:column headerText="Valor Pago">
+		    			#{pagamentoHistoricoMDBean.acumulaValor(item.tbPagamento.id, item.vlPago)}
+		    			<h:outputText value="#{item.vlPago}" >
+							<f:convertNumber type="currency"/>
+		    			</h:outputText>
+		    		</p:column>		  
+					<p:summaryRow>
+						<p:column colspan="3" style="text-align: right;color: red">
+							<h:outputText value="Valor Restante: " />
+							<h:outputText value="#{item.vlTotal - pagamentoHistoricoMDBean.valorAcumulado}">
+								<f:convertNumber type="currency"/>
+							</h:outputText>
+						</p:column>
+					</p:summaryRow>		    		
+	            </p:dataTable>
+          	</div> 
+          	         	
+        </h:form>
+    </h:body>
+     
+</html>
