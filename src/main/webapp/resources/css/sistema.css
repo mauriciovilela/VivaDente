@@ -284,6 +284,10 @@ input[type="button"] > .ui-state-hover {
     right: 3px !important;
 }
 
+.ui-state-active a {
+	color: white !important;
+}
+
 .fc-holiday {
     background-color: #ff6666;
     color: white;

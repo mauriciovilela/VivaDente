@@ -56,7 +56,7 @@ public class PacienteBLL implements Serializable {
 			manager.remove(item);
 			manager.flush();
 		} catch (PersistenceException e) {
-			throw new NegocioException("Registro não pode ser excluído.");
+			throw new NegocioException("Registro não pode ser excluído. Verifique os pagamentos e agenda.");
 		}
 	}
 	

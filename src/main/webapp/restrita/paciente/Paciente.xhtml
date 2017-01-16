@@ -15,61 +15,145 @@
     		<o:viewParam name="paciente" value="#{pacienteBean.paciente}" />
     		<f:event listener="#{pacienteBean.inicializar}" type="preRenderView" />
     	</f:metadata>
+    	
+    	<script type="text/javascript">
+	    	$( document ).ready(function() {
+	    		$('div[role=tabpanel]').eq(1).hide();
+	    	});    	
+    	</script>
     
-    	<h:form>
+    	<h:form id="frm">
 		
 			<f:passThroughAttribute name="autocomplete" value="off"/>
 
 	    	<p:messages autoUpdate="true" closable="true" />
-	    	
+	    		    	
 	    	<p:focus for="dsNome"></p:focus>
 	    	
-	    	<p:panelGrid columns="2" id="painel">
-	    						
-				<f:facet name="header"> 
-				    #{pacienteBean.editando ? 'Edição de registro' : 'Novo paciente'}
-				</f:facet>	    
-				
-	    		<p:outputLabel value="Nome" for="dsNome"/>
-	    		<p:inputText id="dsNome" maxlength="100" value="#{pacienteBean.paciente.dsNome}"/>
-	    				    				
-	    		<p:outputLabel value="Celular" for="dsCelular"/>
-		        <p:inputText id="dsCelular" maxlength="12" value="#{pacienteBean.paciente.dsCelular}">
-		            <pe:keyFilter regEx="/[\d]/"/>
-		        </p:inputText> 	    		
-	    				    				
-	    		<p:outputLabel value="Telefone Fixo" for="dsFone"/>
-		        <p:inputText id="dsFone" maxlength="12" value="#{pacienteBean.paciente.dsFone}">
-		            <pe:keyFilter regEx="/[\d]/"/>
-		        </p:inputText> 	    		
-	    							
-	    		<p:outputLabel value="CPF / RG" for="nrCPF"/>
-	    		<p:inputText id="nrCPF" maxlength="11" value="#{pacienteBean.paciente.nrRgCpf}"/>
-
-	    		<p:outputLabel value="Endereço" for="dsEndereco"/>
-	    		<p:inputText id="dsEndereco" maxlength="150" value="#{pacienteBean.paciente.dsEndereco}"
-	    			style="width: 250px;" />
-	    			       		    		
-	    		<p:outputLabel value="Cidade" for="dsCidade"/>
-	    		<p:inputText id="dsCidade" maxlength="60" value="#{pacienteBean.paciente.dsCidade}"
-	    			style="width: 250px;" />
-	    			       		    						
-				<p:outputLabel value="Nascimento" for="dtNasc" />
-				<p:calendar id="dtNasc" pattern="dd/MM/yyyy" mask="true"
-					value="#{pacienteBean.paciente.dtNascimento}" locale="pt" />
+			    <div style="float: left; position: absolute; width: 49%;">
+			    	<p:panelGrid columns="2" id="painel">
+			    						
+						<f:facet name="header"> 
+						    #{pacienteBean.editando ? 'Edição de registro' : 'Novo paciente'}
+						</f:facet>	    
 						
-	    		<p:outputLabel for="botoes"/>
-	    		<p:outputPanel id="botoes">
-					<p:commandLink id="lnkFinalizar" update="@form" action="#{pacienteBean.salvar}">
-						<i class="fa fa-fw fa-check"></i><span>Salvar</span>
-					</p:commandLink>
-					<p:link outcome="/restrita/paciente/PacientePesquisa">
-						<i class="fa fa-fw fa-arrow-circle-left"></i><span>Voltar</span>
-					</p:link>
-	    		</p:outputPanel>
-	    		
-	    	</p:panelGrid>
-    	
+			    		<p:outputLabel value="Nome" for="dsNome"/>
+			    		<p:inputText id="dsNome" maxlength="100" value="#{pacienteBean.paciente.dsNome}"/>
+			    				    				
+			    		<p:outputLabel value="Celular" for="dsCelular"/>
+				        <p:inputText id="dsCelular" maxlength="12" value="#{pacienteBean.paciente.dsCelular}">
+				            <pe:keyFilter regEx="/[\d]/"/>
+				        </p:inputText> 	    		
+			    				    				
+			    		<p:outputLabel value="Telefone Fixo" for="dsFone"/>
+				        <p:inputText id="dsFone" maxlength="12" value="#{pacienteBean.paciente.dsFone}">
+				            <pe:keyFilter regEx="/[\d]/"/>
+				        </p:inputText> 	    		
+			    							
+			    		<p:outputLabel value="CPF / RG" for="nrCPF"/>
+			    		<p:inputText id="nrCPF" maxlength="11" value="#{pacienteBean.paciente.nrRgCpf}"/>
+		
+			    		<p:outputLabel value="Endereço" for="dsEndereco"/>
+			    		<p:inputText id="dsEndereco" maxlength="150" value="#{pacienteBean.paciente.dsEndereco}"
+			    			style="width: 250px;" />
+			    			       		    		
+			    		<p:outputLabel value="Cidade" for="dsCidade"/>
+			    		<p:inputText id="dsCidade" maxlength="60" value="#{pacienteBean.paciente.dsCidade}"
+			    			style="width: 250px;" />
+			    			       		    						
+						<p:outputLabel value="Nascimento" for="dtNasc" />
+						<p:calendar id="dtNasc" pattern="dd/MM/yyyy" mask="true"
+							value="#{pacienteBean.paciente.dtNascimento}" locale="pt" />
+								
+			    		<p:outputLabel for="botoes"/>
+			    		<p:outputPanel id="botoes">
+							<p:commandLink id="lnkFinalizar" update="@form" action="#{pacienteBean.salvar}">
+								<i class="fa fa-fw fa-check"></i><span>Salvar</span>
+							</p:commandLink>
+			    			<p:commandLink title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+			    					process="@this" update=":frm:confirmacaoExclusaoDialog">
+			    					<i class="fa fa-fw fa-trash"></i><span>Excluir</span>
+			    			</p:commandLink>					
+							<p:link outcome="/restrita/paciente/PacientePesquisa">
+								<i class="fa fa-fw fa-arrow-circle-left"></i><span>Voltar</span>
+							</p:link>
+			    		</p:outputPanel>
+			    		
+			    	</p:panelGrid>
+    			</div>
+ 
+   				<div style="float: right; position: absolute;    right: 0px;    width: 50%;">
+   				
+			    	<p:panelGrid id="pnl2" columns="2">
+						<f:facet name="header"> 
+						    Histórico
+						</f:facet>	
+					</p:panelGrid>
+					
+				    <p:tabView>
+				        <p:tab title="Pagamentos">
+				            <p:dataTable var="item" value="#{pacienteBean.historicoPagamentos}" 
+				            	emptyMessage="Nenhum registro encontrado" paginator="false" sortBy="#{item.tbPagamento.id}">
+					    		<p:column headerText="Data">
+					    			<h:outputText value="#{item.dtEntrada}" >
+					    				<f:convertDateTime pattern="dd/MM/yy" />
+					    			</h:outputText>
+					    		</p:column>		    		
+					    		<p:column headerText="Valor Total">
+					    			<h:outputText value="#{item.vlTotal}" >
+										<f:convertNumber type="currency"/>
+					    			</h:outputText>
+					    		</p:column>		    		
+					    		<p:column headerText="Valor Pago">
+					    			#{pacienteBean.acumulaValor(item.tbPagamento.id, item.vlPago)}
+					    			<h:outputText value="#{item.vlPago}" >
+										<f:convertNumber type="currency"/>
+					    			</h:outputText>
+					    		</p:column>		  
+								<p:summaryRow>
+									<p:column colspan="3" style="text-align: right;color: red">
+										<h:outputText value="Valor Restante: " />
+										<h:outputText value="#{item.vlTotal - pacienteBean.valorAcumulado}">
+											<f:convertNumber type="currency"/>
+										</h:outputText>
+									</p:column>
+								</p:summaryRow>		    		
+				            </p:dataTable>	 
+				        </p:tab>
+				        <p:tab title="Consultas">
+				            <p:dataTable var="item" value="#{pacienteBean.historicoAgenda}" emptyMessage="Nenhum registro encontrado"
+				            	rows="10" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+					    		<p:column headerText="Data Agenda" style="width: 140px">
+					    			<h:outputText value="#{item.dtInicio}" >
+					    				<f:convertDateTime pattern="dd/MM/yy HH:mm" locale="pt" />  
+					    			</h:outputText> - 
+					    			<h:outputText value="#{item.dtFim}" >
+					    				<f:convertDateTime pattern=" HH:mm" locale="pt" />  
+					    			</h:outputText>
+					    		</p:column>		    		
+					    		<p:column headerText="Status" >
+					    			<h:outputText value="#{item.dsAgendaStatus}" />
+					    		</p:column>	  		
+					    		<p:column headerText="Procedimento">
+					    			<h:outputText value="#{item.dsProcedimento}" />
+					    		</p:column>	  		
+					    		<p:column headerText="Dentista">
+					    			<h:outputText value="#{item.dsDentista}" />
+					    		</p:column>	  		
+				            </p:dataTable>	
+				        </p:tab>
+				    </p:tabView>        
+    			</div>    	
+    		    	
+	    	<p:confirmDialog header="Exclusão" 
+	    		message="Tem certeza que deseja excluir ?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide()"
+	    			action="#{pacienteBean.excluir}" process="@this"
+	    			update="@form" />
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" />
+	    	</p:confirmDialog>
+
     	</h:form>
     	
     </ui:define>
