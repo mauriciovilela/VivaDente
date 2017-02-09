@@ -42,7 +42,7 @@ public class PacienteBean implements Serializable {
 	private String promocao;
 
 	@Inject
-	private PagamentoHistoricoBLL bllHistorico;
+	private PagamentoHistoricoBLL bllHistoricoPagamento;
 
 	@Inject
 	private AgendaService agendaService;
@@ -72,7 +72,7 @@ public class PacienteBean implements Serializable {
 				paciente.setDsCidade("Uberlândia, MG");
 			}
 			else {
-				historicoPagamentos = bllHistorico.porPaciente(paciente.getId());
+				historicoPagamentos = bllHistoricoPagamento.porPaciente(paciente.getId());
 				historicoAgenda = agendaService.listarPorPaciente(paciente.getId());
 			}
 		}

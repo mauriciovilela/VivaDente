@@ -112,7 +112,7 @@ public class PagamentoBean implements Serializable {
 		
 		pagamento = bllPagamento.porId(pagamento.getId());
 		pagamento.setVlTotal(pagamento.getVlTotal().add(vlAcrescimo));
-		pagamento = pagamentoService.salvar(this.pagamento, null);
+		pagamento = pagamentoService.salvar(this.pagamento, new BigDecimal(0));
 		
 		pagamento.setVlPago(null);
 		pagamento.setDsObservacao(StringUtils.EMPTY);
@@ -126,8 +126,11 @@ public class PagamentoBean implements Serializable {
 
 		// Insere um registro de log
 		auditoria.salvar(audit);
-
+		
+		FacesUtil.addInfoMessage("Acréscimo de R$ " + vlAcrescimo + " adicionado. Valor total atualizado: R$ " + pagamento.getVlTotal() + ".");
+	
 		vlAcrescimo = null;
+		limpar();
 	}
 
 	public void validarSalvar() {
@@ -143,6 +146,11 @@ public class PagamentoBean implements Serializable {
 		
 		if (vlValorAPagar == null) {
 			vlValorAPagar = pagamento.getVlTotal();
+		}
+		if (historico.size() > 0) {
+			if (pagamento.getVlPago().doubleValue() == 0) {
+				throw new NegocioException("Valor a ser pago deve ser maior do que zerro.");
+			}			
 		}
 		if (pagamento.getVlPago().subtract(vlValorAPagar).doubleValue() > 0) {
 			throw new NegocioException("Valor pago não pode ser maior que o máximo: R$ " + vlValorAPagar.toString());
