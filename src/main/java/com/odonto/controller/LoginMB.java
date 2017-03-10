@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import com.odonto.BLL.FuncionalidadePerfilBLL;
 import com.odonto.BLL.UsuarioBLL;
+import com.odonto.constants.Constants;
 import com.odonto.dto.AcessosOUT;
 import com.odonto.model.TbUsuario;
 import com.odonto.security.SessionContext;
@@ -46,10 +47,13 @@ public class LoginMB implements Serializable {
 	
 	private TbUsuario usuarioLogado;
 	
+	private Integer idFilial;
+	
 	public LoginMB() {
 		// Carrega o arquivo de configuração para a memória
 		AppConfigProperties prop = new AppConfigProperties();
 		prop.init();
+		idFilial = Constants.TbFilial.centro;
 	}
 	
 	public String realizarLogin() {
@@ -69,7 +73,8 @@ public class LoginMB implements Serializable {
 				return StringUtils.EMPTY;
 			}
 			else {
-				FacesUtil.addInfoMessage("Logout realizado com sucesso !");
+				FacesUtil.addInfoMessage("Login realizado com sucesso !");
+				SessionContext.getInstance().setIdFilial(idFilial);
 				// Adiciona os dados do usuario logado na sessao
 				SessionContext.getInstance().setAttribute("usuarioLogado", usuarioLogado);
 				// Carrega os dados do Menu
@@ -152,6 +157,14 @@ public class LoginMB implements Serializable {
 
 	public void setUsuarioLogado(TbUsuario usuarioLogado) {
 		this.usuarioLogado = usuarioLogado;
+	}
+
+	public Integer getIdFilial() {
+		return idFilial;
+	}
+
+	public void setIdFilial(Integer idFilial) {
+		this.idFilial = idFilial;
 	}
 
 }

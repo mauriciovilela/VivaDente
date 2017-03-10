@@ -75,9 +75,18 @@
 	right: 0;
 	left: 0;
 	min-height: 40px;
-	z-index: 9999;
-	
+	z-index: 9999;	
 	background-color: #117fee;
+}
+
+.aw-topbar-2 {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	min-height: 40px;
+	z-index: 9999;	
+	background-color: darkgreen;
 }
 
 .aw-topbar > img {

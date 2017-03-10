@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import com.odonto.BLL.PagamentoBLL;
 import com.odonto.BLL.PagamentoHistoricoBLL;
 import com.odonto.model.TbPagamento;
+import com.odonto.security.SessionContext;
 import com.odonto.util.jpa.Transactional;
 
 public class PagamentoService implements Serializable {
@@ -23,6 +24,7 @@ public class PagamentoService implements Serializable {
 	@Transactional
 	public TbPagamento salvar(TbPagamento item, BigDecimal vlPagoAtual) {
 		item.setFlPago(false);
+		item.setIdFilial(SessionContext.getInstance().getIdFilial());
 		TbPagamento pagamento = bll.guardar(item);		
 		if (vlPagoAtual != null) {
 			pgtoHistBLL.guardar(pagamento, vlPagoAtual);			

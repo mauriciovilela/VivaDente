@@ -17,6 +17,7 @@ import com.odonto.model.TbAgenda;
 import com.odonto.model.TbAgendaHistorico;
 import com.odonto.model.TbAgendaStatus;
 import com.odonto.model.TbProcedimento;
+import com.odonto.security.SessionContext;
 import com.odonto.util.jpa.Transactional;
 
 public class AgendaService implements Serializable {
@@ -38,11 +39,13 @@ public class AgendaService implements Serializable {
 	public TbAgenda salvar(TbAgenda item) {
 
 		boolean houveAgenda = (item.getId() != null);
+		
 		Date dtInicioAntigo = null;
 		Date dtFimAntigo = null;
 		TbAgendaStatus statusAntigo = null;
 		TbProcedimento procedimentoAntigo = null;
 		String descricaoAntiga = null;
+		
 		if (houveAgenda) {
 			TbAgenda antigo = bll.porId(item.getId());
 			dtInicioAntigo = antigo.getDtInicio();
@@ -53,6 +56,8 @@ public class AgendaService implements Serializable {
 		}
 
 		item.setDtInclusao(new Date());
+		item.setIdFilial(SessionContext.getInstance().getIdFilial());
+
 		TbAgenda novo = bll.guardar(item);
 
 		boolean remarcado = novo.getTbAgendaStatus().getId().equals(Constants.TbAgendaStatus.remarcado);

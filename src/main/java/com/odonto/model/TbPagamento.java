@@ -56,7 +56,10 @@ public class TbPagamento implements Serializable {
 
 	@Column(name = "FL_PAGO")
 	private Boolean flPago;
-
+	
+	@Column(name="ID_FILIAL")
+	private Integer idFilial;
+	
 	public TbPagamento() {
 	}
 
@@ -130,6 +133,14 @@ public class TbPagamento implements Serializable {
 
 	public void setFlPago(Boolean flPago) {
 		this.flPago = flPago;
+	}
+
+	public Integer getIdFilial() {
+		return idFilial;
+	}
+
+	public void setIdFilial(Integer idFilial) {
+		this.idFilial = idFilial;
 	}
 
 	@Override

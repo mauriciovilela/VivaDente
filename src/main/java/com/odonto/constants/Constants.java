@@ -6,17 +6,9 @@ public final class Constants {
 		public static final int cdLoteriaMegaSena = 1;	
 	}
 
-	public class TbTipoPgto {
-		public static final int dinheiro = 1;
-		public static final int credito = 2;
-		public static final int debito = 3;
-		public static final int cheque = 4;
-	}
-
-	public class TbStatusPgto {
-		public static final int pago = 1;
-		public static final int pendente = 2;
-		public static final int pasta = 3;
+	public class TbFilial {
+		public static final int centro = 1;
+		public static final int tocantins = 2;
 	}
 	
 	public class TbAgendaStatus {

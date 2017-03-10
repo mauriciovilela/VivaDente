@@ -5,6 +5,7 @@ import java.util.List;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import com.odonto.constants.Constants;
 import com.odonto.dto.AcessosOUT;
 import com.odonto.dto.ConfigOUT;
 import com.odonto.dto.FiltroIN;
@@ -95,6 +96,18 @@ public class SessionContext {
 	public void setAttribute(String nome, Object valor) {
 		currentExternalContext().getSessionMap().remove(nome);
 		currentExternalContext().getSessionMap().put(nome, valor);
+	}
+	
+	public void setIdFilial(Integer idFilial) {
+		setAttribute("idFilial", idFilial);
+	}
+
+	public Integer getIdFilial() {
+		Integer id = (Integer) getAttribute("idFilial");
+		if (id == null) {
+			setIdFilial(Constants.TbFilial.centro);
+		}
+		return (Integer) getAttribute("idFilial");
 	}
 
 }

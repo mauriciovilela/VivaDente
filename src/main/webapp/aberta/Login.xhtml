@@ -44,6 +44,14 @@
 					<h:outputLabel for="password" value="Senha:" />
 					<p:password id="password" value="#{loginMB.senha}" 
 						label="password" style="width: 120px" />
+						
+					<h:outputLabel for="outFilial"></h:outputLabel>
+					<p:outputPanel id="outFilial">
+				        <p:selectOneButton value="#{loginMB.idFilial}">
+				            <f:selectItem itemLabel="Centro" itemValue="1" />
+				            <f:selectItem itemLabel="Tocantins" itemValue="2" />
+				        </p:selectOneButton>					
+					</p:outputPanel>						
 	
 					<p:outputLabel for="botoes"/>
 		    		<p:outputPanel id="botoes">

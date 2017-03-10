@@ -11,7 +11,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>
-        	<ui:insert name="titulo">VivaDente</ui:insert>
+        	<ui:insert name="titulo">VidaDente</ui:insert>
         </title>
         <!-- CSS -->
         <h:outputStylesheet library="css" name="sistema.css" />
@@ -29,11 +29,11 @@
 		</p:dialog>  		
 		
 		<!-- Cabeçalho -->
-		<div class="aw-topbar">
+		<p:outputPanel styleClass="#{homeMB.nomeFilial == 'Centro' ? 'aw-topbar' : 'aw-topbar-2'}">
 			<a href="#" class="aw-toggle  js-toggle">
 				<i class="fa  fa-bars" style="font-size: 21px;"></i>
 			</a>
-			<p:link outcome="/aberta/Home" styleClass="cabecalho" value="Viva Dente" style="font-size: 17px !important;margin-top: 2px;" />
+			<p:link outcome="/aberta/Home" styleClass="cabecalho" value="Vida Dente (#{homeMB.nomeFilial})" style="font-size: 17px !important;margin-top: 2px;" />
 			<p:link outcome="/restrita/usuario/UsuarioTrocaSenha" value="(#{homeMB.nomeUsuario})"  style="position: absolute;float: right;right: 70px;top: 12px;color: white;" />
 			<h:form>
 			<!-- Logout -->
@@ -42,7 +42,7 @@
 					<i class="fa fa-fw fa-sign-out"></i>Sair
 				</h:commandLink>
 			</h:form>				 
-		</div>
+		</p:outputPanel>
 		
 		<!-- Menu -->
 		<aside class="aw-sidebar  js-sidebar">

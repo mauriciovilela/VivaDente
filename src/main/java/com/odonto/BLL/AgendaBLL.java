@@ -58,6 +58,7 @@ public class AgendaBLL implements Serializable {
 		criteria.createAlias("tbAgendaStatus", "AS");
 		criteria.createAlias("tbPaciente", "P", JoinType.LEFT_OUTER_JOIN);
 		criteria.createAlias("tbProcedimento", "PR");
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		criteria.add(Restrictions.eq("D.id", idDentista));
 		criteria.add(
 			Restrictions.not(
@@ -122,6 +123,7 @@ public class AgendaBLL implements Serializable {
 		criteria.createAlias("tbPaciente", "P");
 		criteria.createAlias("tbProcedimento", "PR");
 		criteria.createAlias("tbAgendaStatus", "AS");
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		criteria.add(Restrictions.eq("P.id", idPaciente));
 		criteria.addOrder(Order.asc("D.dsNome"));
 		criteria.addOrder(Order.asc("dtInicio"));
@@ -158,6 +160,7 @@ public class AgendaBLL implements Serializable {
 		Session session = manager.unwrap(Session.class);
 		Criteria criteria = session.createCriteria(TbAgenda.class);
 		criteria.createAlias("tbProcedimento", "P");
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		criteria.setProjection(Projections.projectionList()
 				.add(Projections.groupProperty("P.id"), "id")
 				.add(Projections.groupProperty("P.dsDescricao"), "dsDescricao")

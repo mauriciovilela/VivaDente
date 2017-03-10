@@ -26,29 +26,42 @@
 			<p:sticky target="pnlDentistas" margin="40"
 				rendered="#{!homeMB.perfilDentista}" />
 
-			<p:outputPanel id="pnlDentistas" style="background: white;"
-				rendered="#{!homeMB.perfilDentista}">
-
-				<p:selectOneRadio id="idDentista" value="#{agendaBean.idDentista}"
-					layout="#{agendaBean.layoutRB}">
-					<f:selectItems value="#{homeMB.dentistas}" var="item"
-						itemLabel="#{item.dsNome}" itemValue="#{item.id}" />
-					<p:ajax listener="#{agendaBean.pesquisarPorDentista}"
-						update="outCalendario outLegenda outDialogRemarcar"></p:ajax>
-				</p:selectOneRadio>
-
-			</p:outputPanel>
-
-			<p:outputPanel id="pnlDentista" rendered="#{homeMB.perfilDentista}">
-
-				<p:selectOneRadio id="idDentista2" value="#{agendaBean.idDentista}">
-					<f:selectItems value="#{agendaBean.dentistas}" var="item"
-						itemLabel="#{item.dsNome}" itemValue="#{item.id}" />
-					<p:ajax listener="#{agendaBean.pesquisarPorDentista}"
-						update="outCalendario"></p:ajax>
-				</p:selectOneRadio>
-
-			</p:outputPanel>
+			<div style="height: 30px;">
+				<div style="float: left">
+					<p:outputPanel id="pnlDentistas" style="background: white;"
+						rendered="#{!homeMB.perfilDentista}">
+		
+						<p:selectOneRadio id="idDentista" value="#{agendaBean.idDentista}"
+							layout="#{agendaBean.layoutRB}">
+							<f:selectItems value="#{homeMB.dentistas}" var="item"
+								itemLabel="#{item.dsNome}" itemValue="#{item.id}" />
+							<p:ajax listener="#{agendaBean.pesquisarPorDentista}"
+								update="outCalendario outLegenda outDialogRemarcar"></p:ajax>
+						</p:selectOneRadio>
+		
+					</p:outputPanel>
+		
+					<p:outputPanel id="pnlDentista" rendered="#{homeMB.perfilDentista}">
+		
+						<p:selectOneRadio id="idDentista2" value="#{agendaBean.idDentista}">
+							<f:selectItems value="#{agendaBean.dentistas}" var="item"
+								itemLabel="#{item.dsNome}" itemValue="#{item.id}" />
+							<p:ajax listener="#{agendaBean.pesquisarPorDentista}"
+								update="outCalendario"></p:ajax>
+						</p:selectOneRadio>
+		
+					</p:outputPanel>
+				</div>
+				<div style="float: right;">
+			        <p:selectOneButton value="#{agendaBean.idFilial}">
+			            <f:selectItem itemLabel="Centro" itemValue="1" />
+			            <f:selectItem itemLabel="Tocantins" itemValue="2" />
+						<p:ajax listener="#{agendaBean.trocarFilial}"
+							oncomplete="location.reload()"></p:ajax>
+			        </p:selectOneButton>
+				</div>
+			</div>
+			
  
 <!-- 		    <p:contextMenu for="_schCalendario"> -->
 <!-- 		        <p:menuitem value="Bloquear Agenda" update="@form" /> -->
@@ -113,7 +126,7 @@
 
 						<p:outputLabel for="dsFone" value="Telefone" 
 							rendered="#{ (agendaBean.paciente.dsFone ne null) or (agendaBean.paciente.dsCelular ne null)}" />
-						<h:outputText id="dsFone" value="#{agendaBean.paciente.dsFone} ** #{agendaBean.paciente.dsCelular}"
+						<h:outputText id="dsFone" value="#{agendaBean.formata(agendaBean.paciente.dsFone)} ** #{agendaBean.formata(agendaBean.paciente.dsCelular)}"
 							style="font-size: 14px;font-weight:bold"
 							 rendered="#{ (agendaBean.paciente.dsFone ne null) or (agendaBean.paciente.dsCelular ne null)}" />
 

@@ -60,7 +60,9 @@ public class HomeMB implements Serializable {
 	private boolean perfilDentista;
 	private boolean perfilSocio;
 	private boolean perfilSecretaria;
-
+	
+	private String nomeFilial;
+	private Integer idFilial;
 
 	@PostConstruct
 	private void pageLoad() {
@@ -72,6 +74,9 @@ public class HomeMB implements Serializable {
 			perfilDentista = perfilLogado.equals("DENTISTA");
 			perfilSocio = perfilLogado.equals("SOCIO");
 			perfilSecretaria = perfilLogado.equals("SECRETARIA");
+			
+			idFilial = SessionContext.getInstance().getIdFilial();
+			setNomeFilial(idFilial.equals(1) ? "Centro" : "Tocantins");
 
 			if (SessionContext.getInstance().getUsuarioLogado().getDsSenha().equals("698dc19d489c4e4db73e28a713eab07b")) {
 				Util.redirect("/restrita/usuario/UsuarioTrocaSenha.xhtml");
@@ -198,6 +203,22 @@ public class HomeMB implements Serializable {
 
 	public void setPacientesLab(List<UsuarioOUT> pacientesLab) {
 		this.pacientesLab = pacientesLab;
+	}
+
+	public String getNomeFilial() {
+		return nomeFilial;
+	}
+
+	public void setNomeFilial(String nomeFilial) {
+		this.nomeFilial = nomeFilial;
+	}
+
+	public Integer getIdFilial() {
+		return idFilial;
+	}
+
+	public void setIdFilial(Integer idFilial) {
+		this.idFilial = idFilial;
 	}
 
 }

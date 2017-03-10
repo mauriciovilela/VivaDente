@@ -58,6 +58,9 @@ public class TbPagamentoHistorico implements Serializable {
 	@JoinColumn(name="ID_PAGAMENTO")
 	@NotNull
 	private TbPagamento tbPagamento;
+
+	@Column(name="ID_FILIAL")
+	private Integer idFilial;
 	
 	public TbPagamentoHistorico() {
 	}
@@ -132,6 +135,14 @@ public class TbPagamentoHistorico implements Serializable {
 
 	public void setTbPagamento(TbPagamento tbPagamento) {
 		this.tbPagamento = tbPagamento;
+	}
+
+	public Integer getIdFilial() {
+		return idFilial;
+	}
+
+	public void setIdFilial(Integer idFilial) {
+		this.idFilial = idFilial;
 	}
 
 	@Override

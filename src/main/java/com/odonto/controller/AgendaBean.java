@@ -1,11 +1,14 @@
 package com.odonto.controller;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -13,6 +16,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.swing.text.MaskFormatter;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
@@ -95,6 +99,9 @@ public class AgendaBean implements Serializable {
 	
 	private String nomeDentista;
 	private String dataDentista;
+	private Integer idFilial;
+	
+	Map<Integer, String> mapPatternFone = new HashMap<Integer, String>(); 
 	
 	public AgendaBean() {
 		eventModel = new LazyScheduleModel() {
@@ -112,6 +119,7 @@ public class AgendaBean implements Serializable {
 	@PostConstruct
 	private void pageLoad() {
 		if (FacesUtil.isNotPostback()) {
+			idFilial = SessionContext.getInstance().getIdFilial();
 			agenda = new TbAgenda();
 			if (homeMB.isPerfilDentista()) {
 				TbUsuario usuarioLogado = SessionContext.getInstance().getUsuarioLogado();
@@ -126,7 +134,14 @@ public class AgendaBean implements Serializable {
 				idDentista = SessionContext.getInstance().getCodigoDentista();
 				pesquisarPorDentista();
 			}
+			setPatternFone();
 		}
+	}
+
+	public void trocarFilial() {
+		SessionContext.getInstance().setIdFilial(idFilial);
+		homeMB.setNomeFilial(idFilial.equals(1) ? "Centro" : "Tocantins");		
+		pesquisarPorDentista();
 	}
 
 	public void pesquisarPorDentista() {
@@ -435,6 +450,35 @@ public class AgendaBean implements Serializable {
 		}
 	}
 	
+	public String formata(String valor) {
+		if (valor == null) {
+			return valor;
+		}
+		if (!StringUtils.isNumeric(valor)) {
+			return valor;
+		}
+		String pattern = mapPatternFone.get(valor.trim().length());
+		if (pattern == null) {
+			return valor;
+		}
+        MaskFormatter mf;
+        try {
+            mf = new MaskFormatter(pattern);
+            mf.setValueContainsLiteralCharacters(false);
+            return mf.valueToString(valor);
+        } catch (ParseException ex) {
+            ex.getStackTrace();
+        }
+        return null;
+    }
+	
+	private void setPatternFone() {
+		mapPatternFone.put(8, "####-####");
+		mapPatternFone.put(9, "#-####-####");
+		mapPatternFone.put(10, "(##) ####-####");
+		mapPatternFone.put(11, "(##) #-####-####");	
+	}
+	
 	public void selecionaDentista() {
 		//do nothing
 	}
@@ -579,6 +623,14 @@ public class AgendaBean implements Serializable {
 
 	public void setTelefonePaciente(String telefonePaciente) {
 		this.telefonePaciente = telefonePaciente;
+	}
+
+	public Integer getIdFilial() {
+		return idFilial;
+	}
+
+	public void setIdFilial(Integer idFilial) {
+		this.idFilial = idFilial;
 	}
 
 

@@ -17,6 +17,7 @@ import org.hibernate.criterion.Restrictions;
 import com.odonto.model.TbPaciente;
 import com.odonto.model.TbPagamento;
 import com.odonto.model.TbPagamentoHistorico;
+import com.odonto.security.SessionContext;
 import com.odonto.service.NegocioException;
 import com.odonto.util.jpa.Transactional;
 
@@ -41,6 +42,7 @@ public class PagamentoHistoricoBLL implements Serializable {
 		novoHistorico.setVlPago(vlPagoAtual);
 		novoHistorico.setVlTotal(item.getVlTotal());
 		novoHistorico.setTbPagamento(item);
+		novoHistorico.setIdFilial(SessionContext.getInstance().getIdFilial());
 		return manager.merge(novoHistorico);
 	}
 
@@ -48,6 +50,7 @@ public class PagamentoHistoricoBLL implements Serializable {
 	public List<TbPagamentoHistorico> porPaciente(TbPaciente tbPaciente) {
 		Session session = manager.unwrap(Session.class);
 		Criteria criteria = session.createCriteria(TbPagamentoHistorico.class);
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		if (tbPaciente != null) {
 			criteria.add(Restrictions.eq("tbPaciente.id", tbPaciente.getId()));
 		}
@@ -59,6 +62,7 @@ public class PagamentoHistoricoBLL implements Serializable {
 	public List<TbPagamentoHistorico> porPaciente(Integer idPaciente) {
 		Session session = manager.unwrap(Session.class);
 		Criteria criteria = session.createCriteria(TbPagamentoHistorico.class);
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		criteria.add(Restrictions.eq("tbPaciente.id", idPaciente));
 		criteria.addOrder(Order.asc("tbPagamento.id"));
 		return criteria.list();
@@ -68,6 +72,7 @@ public class PagamentoHistoricoBLL implements Serializable {
 	public List<TbPagamentoHistorico> porPagamento(Integer idPagamento) {
 		Session session = manager.unwrap(Session.class);
 		Criteria criteria = session.createCriteria(TbPagamentoHistorico.class);
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		criteria.add(Restrictions.eq("tbPagamento.id", idPagamento));
 		criteria.addOrder(Order.asc("id"));
 		return criteria.list();
@@ -77,6 +82,7 @@ public class PagamentoHistoricoBLL implements Serializable {
 		Session session = manager.unwrap(Session.class);
 		Criteria criteria = session.createCriteria(TbPagamentoHistorico.class);
 		criteria.setProjection(Projections.sum("vlPago"));
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		criteria.add(Restrictions.eq("tbPagamento.id", idPagamento));
 		BigDecimal valorTotal = (BigDecimal) criteria.uniqueResult();
 		return valorTotal;

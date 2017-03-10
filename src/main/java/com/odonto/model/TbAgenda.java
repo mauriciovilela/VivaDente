@@ -59,6 +59,9 @@ public class TbAgenda implements Serializable {
 	@Column(name="DT_INCLUSAO")
 	private Date dtInclusao;
 	
+	@Column(name="ID_FILIAL")
+	private Integer idFilial;
+	
 	public TbAgenda() {
 	}
 
@@ -140,6 +143,14 @@ public class TbAgenda implements Serializable {
 
 	public void setDtInclusao(Date dtInclusao) {
 		this.dtInclusao = dtInclusao;
+	}
+
+	public Integer getIdFilial() {
+		return idFilial;
+	}
+
+	public void setIdFilial(Integer idFilial) {
+		this.idFilial = idFilial;
 	}
 
 	@Override

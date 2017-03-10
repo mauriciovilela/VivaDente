@@ -35,23 +35,7 @@ public class AgendaHistoricoBLL implements Serializable {
 		item.setTbUsuario(SessionContext.getInstance().getUsuarioLogado());
 		return manager.merge(item);
 	}
-	
-	@SuppressWarnings("unchecked")
-	public List<TbAgendaHistorico> listar() {
-		Session session = manager.unwrap(Session.class);
-		Criteria criteria = session.createCriteria(TbAgendaHistorico.class);
-		return criteria.list();
-	}
-	
-//	@SuppressWarnings("unchecked")
-//	public List<TbAgendaHistorico> porPaciente(FiltroIN filtro) {
-//		Criteria criteria = filtradosCriteria(filtro);
-//		criteria.addOrder(Order.desc("id"));
-//		criteria.setFirstResult(filtro.getFirst());
-//		criteria.setMaxResults(filtro.getPageSize());
-//		return criteria.list();
-//	}
-		
+
 	@SuppressWarnings("unchecked")
 	public List<AgendaOUT> listarPorPaciente(Integer idPaciente) {
 		Session session = manager.unwrap(Session.class);
@@ -60,6 +44,7 @@ public class AgendaHistoricoBLL implements Serializable {
 		criteria.createAlias("tbPaciente", "P");
 		criteria.createAlias("tbProcedimento", "PR");
 		criteria.createAlias("tbAgendaStatus", "AS");
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		criteria.add(Restrictions.eq("P.id", idPaciente));
 		criteria.addOrder(Order.asc("D.dsNome"));
 		criteria.addOrder(Order.asc("dtInicio"));
@@ -77,21 +62,7 @@ public class AgendaHistoricoBLL implements Serializable {
 		criteria.setResultTransformer(new AliasToBeanResultTransformer(AgendaOUT.class));			
 		return criteria.list();
 	}
-	
-//	public Integer porPacienteQTD(FiltroIN filtro) {
-//		Criteria criteria = filtradosCriteria(filtro);
-//		criteria.setProjection(Projections.rowCount());
-//		return ((Number) criteria.uniqueResult()).intValue();
-//	}	
-//	
-//	private Criteria filtradosCriteria(FiltroIN filtro) {
-//		Session session = manager.unwrap(Session.class);
-//		Criteria criteria = session.createCriteria(TbAgendaHistorico.class);
-//		criteria.createAlias("tbAgenda", "A");
-//		criteria.add(Restrictions.eq("A.tbPaciente.id", filtro.getCodigo()));
-//		return criteria;
-//	}
-	
+
 	@Transactional
 	public void remover(TbAgendaHistorico item) {
 		try {

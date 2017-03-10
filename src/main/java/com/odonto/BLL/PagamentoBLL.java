@@ -37,16 +37,7 @@ public class PagamentoBLL implements Serializable {
 		item.setTbUsuario(SessionContext.getInstance().getUsuarioLogado());
 		return manager.merge(item);			
 	}
-
-	@SuppressWarnings("unchecked")
-	public List<TbPagamento> porPaciente(Integer idPaciente) {
-		Session session = manager.unwrap(Session.class);
-		Criteria criteria = session.createCriteria(TbPagamento.class);
-		criteria.add(Restrictions.eq("tbPaciente.id", idPaciente));
-		criteria.addOrder(Order.desc("id"));
-		return criteria.list();
-	}
-
+	
 	@SuppressWarnings("unchecked")
 	public List<TbPagamento> porPacienteDataValorPgtoDentista(
 			Integer idPaciente, Date data, BigDecimal valorTotal, Integer idDentista) {
@@ -56,16 +47,8 @@ public class PagamentoBLL implements Serializable {
 		criteria.add(Restrictions.eq("tbDentista.id", idDentista));
 		criteria.add(Restrictions.eq("dtEntrada", data));
 		criteria.add(Restrictions.eq("vlTotal", valorTotal));
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		criteria.addOrder(Order.desc("id"));
-		return criteria.list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<TbPagamento> porData(Date data) {
-		Session session = manager.unwrap(Session.class);
-		Criteria criteria = session.createCriteria(TbPagamento.class);
-		criteria.add(Restrictions.between("dtEntrada", data, data));
-		criteria.addOrder(Order.asc("id"));
 		return criteria.list();
 	}
 
@@ -73,6 +56,7 @@ public class PagamentoBLL implements Serializable {
 	public List<TbPagamento> inadimplentes() {
 		Session session = manager.unwrap(Session.class);
 		Criteria criteria = session.createCriteria(TbPagamento.class, "pg");
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		criteria.createAlias("pg.tbPaciente", "pac");
 		criteria.add(Restrictions.eq("flPago", false));
 		criteria.addOrder(Order.asc("pac.dsNome"));
@@ -86,12 +70,14 @@ public class PagamentoBLL implements Serializable {
 		
 		// Valor total
 		Criteria criteria = session.createCriteria(TbPagamento.class);
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		criteria.setProjection(Projections.sum("vlTotal"));
 		criteria.add(Restrictions.between("dtEntrada", Util.getDiaMes(data, true), Util.getDiaMes(data, false)));
 		BigDecimal valorTotal = (BigDecimal) criteria.uniqueResult();
 		
 		// Valor Pago
 		criteria = session.createCriteria(TbPagamento.class);
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		criteria.setProjection(Projections.sum("vlPago"));
 		criteria.add(Restrictions.between("dtEntrada", Util.getDiaMes(data, true), Util.getDiaMes(data, false)));
 		BigDecimal valorPago = (BigDecimal) criteria.uniqueResult();		
@@ -108,6 +94,7 @@ public class PagamentoBLL implements Serializable {
 	public TbPagamento validaPendencia(Integer idPaciente) {
 		Session session = manager.unwrap(Session.class);
 		Criteria criteria = session.createCriteria(TbPagamento.class);
+		criteria.add(Restrictions.eq("idFilial", SessionContext.getInstance().getIdFilial()));
 		criteria.add(Restrictions.eq("flPago", false));
 		criteria.add(Restrictions.eq("tbPaciente.id", idPaciente));
 		if (criteria.list().isEmpty()) {
