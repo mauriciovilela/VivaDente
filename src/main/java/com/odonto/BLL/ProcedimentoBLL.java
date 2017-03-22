@@ -12,6 +12,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.odonto.dto.ProcedimentoIN;
@@ -63,4 +64,16 @@ public class ProcedimentoBLL implements Serializable {
 		criteria.addOrder(Order.asc("dsDescricao"));
 		return criteria.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> listarPorNome(String query) {
+		Session session = manager.unwrap(Session.class);
+		Criteria criteria = session.createCriteria(TbProcedimento.class);
+		criteria.setProjection(Projections.groupProperty("dsDescricao"));
+		criteria.add(Restrictions.ilike("dsDescricao", query, MatchMode.ANYWHERE));
+		criteria.setMaxResults(10);
+		criteria.addOrder(Order.asc("dsDescricao"));
+		return criteria.list();
+	}	
+	
 }

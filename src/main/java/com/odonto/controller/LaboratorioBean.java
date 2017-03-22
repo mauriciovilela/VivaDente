@@ -53,6 +53,9 @@ public class LaboratorioBean implements Serializable {
 
 	private BigDecimal vlPagoAtual;
 	private BigDecimal vlValorAPagar;
+
+	@Inject
+	private HomeMB homeMB;
 	
 	private List<TbLaboratorioHistorico> historico;
 	
@@ -121,6 +124,9 @@ public class LaboratorioBean implements Serializable {
 
 		// Persiste o pagamento
 		this.laboratorio = laboratorioService.salvar(this.laboratorio, vlPagoAtual);
+		
+		// Atualiza os dados na sessao
+		homeMB.setPacientesLab(laboratorioBLL.pacientesLab());		
 
 		// Insere um registro de log
 		auditoria.salvar(audit);

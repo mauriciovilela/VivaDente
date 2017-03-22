@@ -148,8 +148,8 @@
 						<p:outputLabel value="Observação" for="dsObservacao" />
 					</p:column>
 					<p:column colspan="2">
-						<p:inputTextarea id="dsObservacao" maxlength="150"
-							value="#{pagamentoBean.pagamento.dsObservacao}" />
+						<p:autoComplete id="dsObservacao" minQueryLength="2" maxlength="20" queryDelay="400" cache="true"
+							value="#{pagamentoBean.pagamento.dsObservacao}" completeMethod="#{procedimentoBean.completeText}" />
 					</p:column>
 				</p:row>
 

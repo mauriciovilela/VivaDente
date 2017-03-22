@@ -10,21 +10,60 @@
     <ui:define name="corpo">
     	<h:form id="frmPesquisa">
 
-	    	<p:panelGrid columns="2" id="painel">
-				<f:facet name="header"> 
-					Relatórios
-				</f:facet>	    			
-	    	</p:panelGrid>
-	    	
-			<p:dataGrid columns="1" value="#{relatoriosBean.menuRelatorios}" var="item"
-				style="margin-top: 7px" >
-				<p:column>
-					<p:link outcome="#{item.dsPagina}">
-						<i class="#{item.dsIcone}"></i> #{item.dsFuncionalidade}
-					</p:link>
-				</p:column>
-			</p:dataGrid>
-				    	
+			<p:panelGrid>
+
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="3" styleClass="vermelha">
+				       		Inadimplentes 
+						</p:column>
+					</p:row>  
+				</f:facet>
+
+				<p:row>
+					<p:column>
+						<p:link outcome="/restrita/relatorio/RptInadimplentes">
+							<i class="fa fa-fw fa-bar-chart"></i> Pacientes
+						</p:link>
+					</p:column>
+				</p:row>		
+				<p:row>
+					<p:column>
+						<p:link outcome="/restrita/relatorio/RptInadimplentesLab">
+							<i class="fa fa-fw fa-bar-chart"></i> Laboratório
+						</p:link>
+					</p:column>
+				</p:row>		
+					
+			</p:panelGrid>
+			
+			<p:panelGrid style="margin-top: 20px;">
+
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="3" styleClass="verde">
+				       		Pagamentos 
+						</p:column>
+					</p:row>  
+				</f:facet>
+
+				<p:row>
+					<p:column>
+						<p:link outcome="/restrita/relatorio/RptPagamentos">
+							<i class="fa fa-fw fa-dollar"></i> Pacientes
+						</p:link>
+					</p:column>
+				</p:row>		
+				<p:row>
+					<p:column>
+						<p:link outcome="/restrita/relatorio/RptPagamentosLab">
+							<i class="fa fa-fw fa-dollar"></i> Laboratório
+						</p:link>
+					</p:column>
+				</p:row>		
+					
+			</p:panelGrid>
+						
     	</h:form>
     </ui:define>
 </ui:composition>

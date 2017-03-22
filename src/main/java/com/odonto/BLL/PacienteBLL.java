@@ -119,8 +119,8 @@ public class PacienteBLL implements Serializable {
 	public List<TbPaciente> listarPorNome(String query) {
 		Session session = manager.unwrap(Session.class);
 		Criteria criteria = session.createCriteria(TbPaciente.class);
-		criteria.add(Restrictions.ilike("dsNome", query, MatchMode.START));
-		criteria.setMaxResults(10);
+		criteria.add(Restrictions.ilike("dsNome", query, MatchMode.ANYWHERE));
+		criteria.setMaxResults(15);
 		return criteria.list();
 	}	
 	

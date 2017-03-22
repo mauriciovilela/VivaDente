@@ -23,7 +23,7 @@
 				</f:facet>	    			
 	    		
 	    		<p:outputLabel value="Nome" for="idPaciente"/>
-				<p:autoComplete id="idPaciente"
+				<p:autoComplete id="idPaciente" inputStyle="width: 300px"
 					value="#{pacienteBeanPesquisa.selecionado}"
 					completeMethod="#{pacienteBean.pacientesPorNome}"
 					minQueryLength="2" cache="true" var="item"
@@ -32,82 +32,9 @@
 					<p:ajax event="itemSelect" listener="#{pacienteBeanPesquisa.redireciona}" 
 						process="@this" update="@form" />
 				</p:autoComplete>
-				
-	    		<p:outputLabel value="Celular" for="celular"/>
-	    		<p:inputText id="celular" value="#{pacienteBeanPesquisa.filtro.fone}" />
-	    		
-	    		<p:outputLabel value="CPF / RG" for="nrcpf"/>
-	    		<p:inputText id="nrcpf" value="#{pacienteBeanPesquisa.filtro.cpfRG}" />
-				
-	    		<p:outputLabel for="botoes"/>
-	    		<p:outputPanel id="botoes">
-					<p:commandLink id="lnkPesquisar" update="@form">
-						<i class="fa fa-fw fa-search"></i><span>Pesquisar</span>
-					</p:commandLink>
-					<p:link outcome="/restrita/paciente/Paciente">
-						<i class="fa fa-fw fa-plus"></i><span>Novo</span>
-					</p:link>
-	    		</p:outputPanel>
-	    		
-	    		<p:defaultCommand target="lnkPesquisar" />
-	    		
+
 	    	</p:panelGrid>
 
-            <p:dataTable reflow="true" id="dtbRegistros" var="item" value="#{pacienteBeanPesquisa.filtrados}" 
-            	emptyMessage="Nenhum registro encontrado" rows="13" paginator="true" 
-            	paginatorAlwaysVisible="false" paginatorPosition="bottom" lazy="true" >
-	    		<p:column headerText="Ação">
-	    			<p:commandLink style="margin-right: 5px;" 
-	    				actionListener="#{pacienteBeanPesquisa.modalHistoricoPagamento(item.id)}"
-			        	process="@this" title="Histórico de pagamentos"><i class="fa fa-fw fa-money"></i>
-			       	</p:commandLink> 
-	    			<p:commandLink actionListener="#{pacienteBeanPesquisa.modalHistoricoConsulta(item.id)}"
-			        	process="@this" title="Histórico de consultas"><i class="fa fa-fw fa-calendar"></i></p:commandLink>
-	    			<p:link outcome="/restrita/paciente/Paciente" title="Editar">
-	    				<i class="fa fa-fw fa-edit"></i>
-	    				<f:param name="paciente" value="#{item.id}" />
-	    			</p:link> 			
-	    			<p:commandLink title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
-	    					process="@this" update=":frmPesquisa:confirmacaoExclusaoDialog">
-	    					<i class="fa fa-fw fa-trash"></i>
-						<f:setPropertyActionListener target="#{pacienteBeanPesquisa.selecionado}" 
-	    					value="#{item}" />	    					
-	    			</p:commandLink>
-	    		</p:column>
-	    		<p:column headerText="Nome">
-	    			<h:outputText value="#{item.dsNome}" />
-	    		</p:column>
-	    		<p:column headerText="Celular">
-	    			<h:outputText value="#{item.dsCelular}" />
-	    		</p:column>
-	    		<p:column headerText="Telefone Fixo">
-	    			<h:outputText value="#{item.dsFone}" />
-	    		</p:column>
-	    		<p:column headerText="Endereço" >
-	    			<h:outputText value="#{item.dsEndereco}" />
-	    		</p:column>
-	    		<p:column headerText="Cidade" >
-	    			<h:outputText value="#{item.dsCidade}" />
-	    		</p:column>
-	    		<p:column headerText="RG / CPF" >
-	    			<h:outputText value="#{item.nrRgCpf}" />
-	    		</p:column>
-	    		<p:column headerText="Nascimento">
-	    			<h:outputText value="#{item.dtNascimento}" >
-	    				<f:convertDateTime pattern="dd/MM" />
-	    			</h:outputText>
-	    		</p:column>					    		
-	    	</p:dataTable>
-	    	
-	    	<p:confirmDialog header="Exclusão" 
-	    		message="Tem certeza que deseja excluir ?"
-	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
-	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide()"
-	    			action="#{pacienteBeanPesquisa.excluir}" process="@this"
-	    			update="@form" />
-	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" />
-	    	</p:confirmDialog>
-	    	
     	</h:form>
     </ui:define>
 </ui:composition>

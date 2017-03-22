@@ -61,6 +61,11 @@ public class ProcedimentoBean implements Serializable {
 		FacesUtil.addInfoMessage(Constants.msgSucesso);
 	}
 
+	public List<String> completeText(String query) {
+		List<String> registros = procedimentoBLL.listarPorNome(query);
+		return registros;
+	}
+
 	public TbProcedimento getProcedimento() {
 		return procedimento;
 	}

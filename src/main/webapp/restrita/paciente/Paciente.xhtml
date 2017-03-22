@@ -94,24 +94,28 @@
 				        <p:tab title="Pagamentos">
 				            <p:dataTable var="item" value="#{pacienteBean.historicoPagamentos}" 
 				            	emptyMessage="Nenhum registro encontrado" paginator="false" sortBy="#{item.tbPagamento.id}">
-					    		<p:column headerText="Data">
+					    		<p:column headerText="Data" style="width: 60px">
 					    			<h:outputText value="#{item.dtEntrada}" >
 					    				<f:convertDateTime pattern="dd/MM/yy" />
 					    			</h:outputText>
 					    		</p:column>		    		
-					    		<p:column headerText="Valor Total">
+					    		<p:column headerText="Valor Total" style="width: 85px">
 					    			<h:outputText value="#{item.vlTotal}" >
 										<f:convertNumber type="currency"/>
 					    			</h:outputText>
 					    		</p:column>		    		
-					    		<p:column headerText="Valor Pago">
+					    		<p:column headerText="Valor Pago" style="width: 85px">
 					    			#{pacienteBean.acumulaValor(item.tbPagamento.id, item.vlPago)}
 					    			<h:outputText value="#{item.vlPago}" >
 										<f:convertNumber type="currency"/>
 					    			</h:outputText>
 					    		</p:column>		  
+					    		<p:column headerText="Observação">
+					    			<h:outputText value="#{item.dsObservacao}" >
+					    			</h:outputText>
+					    		</p:column>		    		
 								<p:summaryRow>
-									<p:column colspan="3" style="text-align: right;color: red">
+									<p:column colspan="4" style="text-align: right;color: red">
 										<h:outputText value="Valor Restante: " />
 										<h:outputText value="#{item.vlTotal - pacienteBean.valorAcumulado}">
 											<f:convertNumber type="currency"/>
