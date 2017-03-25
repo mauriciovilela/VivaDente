@@ -54,8 +54,11 @@ public class LoginMB implements Serializable {
 		AppConfigProperties prop = new AppConfigProperties();
 		prop.init();
 		idFilial = Constants.TbFilial.centro;
+		if ( StringUtils.isNotBlank(FacesUtil.getQueryString("filial")) ) {
+			idFilial = Integer.parseInt(FacesUtil.getQueryString("filial"));			
+		}
 	}
-	
+
 	public String realizarLogin() {
 		try {
 			if (StringUtils.isBlank(login) || StringUtils.isBlank(senha)) {
@@ -116,11 +119,7 @@ public class LoginMB implements Serializable {
 		    SessionContext.getInstance().setAttribute("menu", acessosMenu);
 	    }
     }	
-    
-//    public MenuModel getMenuModel() {
-//    	return (MenuModel) SessionContext.getInstance().getAttribute("menuModel");
-//    }
-    
+
 	public String doLogout() {
 		//logger.info("Fazendo logout com usuário " + SessionContext.getInstance().getUsuarioLogado().getDsUsuario());
 		SessionContext.getInstance().encerrarSessao();

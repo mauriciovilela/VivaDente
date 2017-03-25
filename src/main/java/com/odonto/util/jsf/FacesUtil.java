@@ -11,8 +11,8 @@ public class FacesUtil {
 	
 	public static String getQueryString(String param) {
 		Map<String, String> hsr = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-		if (hsr != null && hsr.get("idPaciente") != null) {
-			return hsr.get("idPaciente").toString();
+		if (hsr != null && hsr.get(param) != null) {
+			return hsr.get(param).toString();
 		}
 		else {
 			return StringUtils.EMPTY;
