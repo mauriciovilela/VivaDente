@@ -72,8 +72,8 @@
 				<p:schedule id="_schCalendario" widgetVar="schCalendario"
 					rendered="#{agendaBean.listaAgenda != null}"
 					value="#{agendaBean.eventModel}" view="agendaWeek" locale="pt"
-					clientTimezone="timeZone=America/Sao_Paulo"
-					timeZone="America/Sao_Paulo" slotDuration="00:15:00"					
+					clientTimezone="timeZone=GMT-3"
+					timeZone="GMT-3" slotDuration="00:15:00"					
 					allDaySlot="false" minTime="07:30" maxTime="20:00" scrollTime="true"
 					axisFormat="H:mm" style="margin-top:10px">
 					<p:ajax event="dateSelect" listener="#{agendaBean.quandoNovo}"

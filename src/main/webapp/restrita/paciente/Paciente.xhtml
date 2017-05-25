@@ -14,15 +14,11 @@
     	<f:metadata>
     		<o:viewParam name="paciente" value="#{pacienteBean.paciente}" />
     		<f:event listener="#{pacienteBean.inicializar}" type="preRenderView" />
-    	</f:metadata>
-    	
-    	<script type="text/javascript">
-	    	$( document ).ready(function() {
-	    		$('div[role=tabpanel]').eq(1).hide();
-	    	});    	
-    	</script>
+    	</f:metadata>    
     
     	<h:form id="frm">
+    	
+    		<h:outputScript library="js" name="jquery.maskMoney.js"  />
 		
 			<f:passThroughAttribute name="autocomplete" value="off"/>
 
@@ -41,13 +37,10 @@
 			    		<p:inputText id="dsNome" maxlength="100" value="#{pacienteBean.paciente.dsNome}"/>
 			    				    				
 			    		<p:outputLabel value="Celular" for="dsCelular"/>
-				        <p:inputText id="dsCelular" maxlength="12" value="#{pacienteBean.paciente.dsCelular}">
-				            <pe:keyFilter regEx="/[\d]/"/>
-				        </p:inputText> 	    		
+				        <p:inputMask id="dsCelular" value="#{pacienteBean.paciente.dsCelular}" mask="(99) 9?9999-9999"/>
 			    				    				
 			    		<p:outputLabel value="Telefone Fixo" for="dsFone"/>
-				        <p:inputText id="dsFone" maxlength="12" value="#{pacienteBean.paciente.dsFone}">
-				            <pe:keyFilter regEx="/[\d]/"/>
+				        <p:inputMask id="dsFone" value="#{pacienteBean.paciente.dsFone}" mask="(99) 9999-9999"/>
 				        </p:inputText> 	    		
 			    							
 			    		<p:outputLabel value="CPF / RG" for="nrCPF"/>
