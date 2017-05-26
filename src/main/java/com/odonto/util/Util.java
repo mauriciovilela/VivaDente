@@ -16,6 +16,7 @@ import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.primefaces.context.RequestContext;
 
 import com.odonto.util.jsf.FacesUtil;
@@ -158,5 +159,30 @@ public class Util {
 		}
 	}
 
+	public static String retornaFone(String celular) {
+		celular = celular.trim();
+		if (StringUtils.isNotBlank(celular)) {
+			String primeiroDigito = celular.substring(0, 1);
+			if (primeiroDigito.equals("3") || primeiroDigito.equals("2")) {
+				return celular;
+			}
+			else {
+				if (celular.length() == 8 || celular.length() == 9) {
+					if (celular.length() == 8 && (primeiroDigito.equals("8") || primeiroDigito.equals("9"))) {
+						return "349".concat(celular);				
+					}
+					else {
+						return "34".concat(celular);
+					}
+				}
+				else {
+					return celular;
+				}
+			}
+		}
+		else {
+			return celular;
+		}
+	}
 	
 }

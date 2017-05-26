@@ -16,6 +16,8 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.odonto.util.Util;
+
 @Entity
 @Table(name = "tb_paciente", uniqueConstraints = @UniqueConstraint(columnNames = { "DS_NOME" }))
 public class TbPaciente implements Serializable {
@@ -99,7 +101,7 @@ public class TbPaciente implements Serializable {
 	}
 
 	public String getDsFone() {
-		return dsFone;
+		return Util.retornaFone(dsFone);
 	}
 
 	public void setDsFone(String dsFone) {
@@ -147,7 +149,7 @@ public class TbPaciente implements Serializable {
 	}
 
 	public String getDsCelular() {
-		return dsCelular;
+		return Util.retornaFone(dsCelular);
 	}
 
 	public void setDsCelular(String dsCelular) {
